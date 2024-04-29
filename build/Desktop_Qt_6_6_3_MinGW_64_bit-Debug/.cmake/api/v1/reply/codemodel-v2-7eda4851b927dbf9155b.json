@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-dadb3176531646fce3c9.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Vehicle_Searching",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Vehicle_Searching::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Vehicle_Searching-Debug-33c5afe98060c7c32a24.json",
+					"name" : "Vehicle_Searching",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Vehicle_Searching_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Vehicle_Searching_autogen-Debug-bc072db780a53ea13d5c.json",
+					"name" : "Vehicle_Searching_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Vehicle_Searching_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Vehicle_Searching_autogen_timestamp_deps-Debug-5f798815bb659bc4b686.json",
+					"name" : "Vehicle_Searching_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/walte/Documents/Dev/Vehicle_Searching/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug",
+		"source" : "C:/Users/walte/Documents/Dev/Vehicle_Searching"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

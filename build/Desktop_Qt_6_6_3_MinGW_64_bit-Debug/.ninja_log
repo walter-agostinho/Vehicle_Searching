@@ -1,0 +1,9 @@
+# ninja log v5
+2	908	7359721479993237	Vehicle_Searching_autogen/timestamp	ed5f54e1fc0047db
+2	908	7359721479993237	C:/Users/walte/Documents/Dev/Vehicle_Searching/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/Vehicle_Searching_autogen/timestamp	ed5f54e1fc0047db
+2	908	7359721479993237	Vehicle_Searching_autogen/mocs_compilation.cpp	ed5f54e1fc0047db
+2	908	7359721479993237	C:/Users/walte/Documents/Dev/Vehicle_Searching/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/Vehicle_Searching_autogen/mocs_compilation.cpp	ed5f54e1fc0047db
+929	3530	7359721507079836	CMakeFiles/Vehicle_Searching.dir/main.cpp.obj	f33c927cd5decde3
+911	3552	7359721507205723	CMakeFiles/Vehicle_Searching.dir/Vehicle_Searching_autogen/mocs_compilation.cpp.obj	feb28a7f803bf5a2
+957	3567	7359721507453603	CMakeFiles/Vehicle_Searching.dir/mainwindow.cpp.obj	d4b718924075ce7b
+3568	3908	7359721510711729	Vehicle_Searching.exe	ac31568a2844a057
