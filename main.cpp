@@ -1,3 +1,4 @@
+#include "databasemanager.h"
 #include "login.h"
 #include "mainwindow.h"
 
@@ -6,6 +7,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    DatabaseManager sqlite;
+
     Login login;
     login.show();
     // MainWindow w;

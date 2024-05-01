@@ -1,5 +1,6 @@
 #include "login.h"
 #include "ui_login.h"
+#include <QMessageBox>
 
 Login::Login(QWidget *parent)
     : QDialog(parent)
@@ -12,3 +13,9 @@ Login::~Login()
 {
     delete ui;
 }
+
+void Login::on_pushButton_clicked()
+{
+    QMessageBox::information(this, "Titulo", "teste");
+}
+
