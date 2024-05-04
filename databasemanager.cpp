@@ -6,6 +6,11 @@ DatabaseManager::DatabaseManager()
     this->ConnectDatabase();
 }
 
+void DatabaseManager::GetConnectionStatus(QString &status)
+{
+    status = this->connectionStatus;
+}
+
 void DatabaseManager::CreateDatabase()
 {
     QDir dir;
@@ -37,12 +42,12 @@ void DatabaseManager::ConnectDatabase()
     this->db.setDatabaseName("C:/Users/walte/Documents/Dev/Vehicle_Searching/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/db/database.db");
     if(db.open())
     {
-        qDebug() << " DATABASE CONNECTED";
-        //emit ConnectionSuccessfull();
+        qDebug() << "DATABASE CONNECTED";
+        this->connectionStatus = "CONECTADO";
     }
     else
     {
         qDebug() << "ERROR = " << this->db.lastError().databaseText();
-        //emit ConnectionFailed(this->db.lastError().databaseText());
+        this->connectionStatus = "DESCONECTADO - ERRO: " + this->db.lastError().databaseText();;
     }
 }

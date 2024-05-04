@@ -2,11 +2,12 @@
 #include "ui_login.h"
 #include <QMessageBox>
 
-Login::Login(QWidget *parent)
-    : QDialog(parent)
+Login::Login(QWidget *parent, std::shared_ptr<DatabaseManager> databaseManager)
+    : QDialog(parent), databaseManager(databaseManager)
     , ui(new Ui::Login)
 {
     ui->setupUi(this);
+    this->ShowConnectionStatus();
 }
 
 Login::~Login()
@@ -14,8 +15,10 @@ Login::~Login()
     delete ui;
 }
 
-void Login::on_pushButton_clicked()
+void Login::ShowConnectionStatus()
 {
-    QMessageBox::information(this, "Titulo", "teste");
+    QString statusConnection;
+    this->databaseManager->GetConnectionStatus(statusConnection);
+    ui->statusConnection->setText(statusConnection);
 }
 

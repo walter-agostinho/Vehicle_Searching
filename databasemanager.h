@@ -8,20 +8,23 @@
 #include <QDir>
 #include <QSql>
 
-class DatabaseManager
+class DatabaseManager : public QObject
 {
+    Q_OBJECT
+
 private:
     QString file;
     QSqlDatabase db;
+    QString connectionStatus;
 
 public:
+    void extracted();
     DatabaseManager();
+    void GetConnectionStatus(QString &status);
+
+private:
     void CreateDatabase();
     void ConnectDatabase();
-
-signals:
-    void ConnectionSuccessfull();
-    void ConnectionFailed(const QString error);
 
 };
 

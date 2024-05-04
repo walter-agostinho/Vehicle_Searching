@@ -7,9 +7,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    DatabaseManager sqlite;
-
-    Login login;
+    std::shared_ptr<DatabaseManager> databaseManager = std::make_shared<DatabaseManager>();
+    Login login(nullptr, databaseManager);
     login.show();
     // MainWindow w;
     // w.show();
