@@ -51,3 +51,49 @@ void DatabaseManager::ConnectDatabase()
         this->connectionStatus = "DESCONECTADO - ERRO: " + this->db.lastError().databaseText();;
     }
 }
+
+void DatabaseManager::CreateTables()
+{
+    QSqlQuery query(this->db);
+    query.prepare("SELECT name FROM sqlite_master WHERE type='table' "
+                  "AND name=users AND name=vehicles");
+    if(query.exec())
+    {
+        int tableCount{0};
+        for(int i=0; i<TABLE_COUNT; i++)
+        {
+            query.next();
+            tableCount++;
+        }
+
+        if(tableCount == TABLE_COUNT)
+        {
+            qDebug() << "Tables already created";
+        }
+    }
+    query.prepare("CREATE TABLE users ("
+                  "id INT PRIMARY KEY AUTO_INCREMENT,"
+                  "user VARCHAR NOT NULL UNIQUE, "
+                  "pass VARCHAR NOT NULL, "
+                  "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP"
+                  ");");
+
+    if(query.exec())
+    {
+        qDebug() << "Tabela users criada";
+    }
+
+    query.prepare("CREATE TABLE vehicles ("
+                  "id INT PRIMARY KEY AUTO_INCREMENT,"
+                  "marca VARCHAR NOT NULL UNIQUE, "
+                  "model VARCHAR NOT NULL, "
+                  "year DATETIME DEFAULT CURRENT_TIMESTAMP"
+                  ");");
+
+    if(query.exec())
+    {
+        qDebug() << "Tabela users criada";
+    }
+
+
+}
