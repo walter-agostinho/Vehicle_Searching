@@ -6,7 +6,9 @@
 #include <QSqlError>
 #include <QFile>
 #include <QDir>
-#include <QSql>
+#include <QSqlQuery>
+
+const int TABLE_COUNT = 3;
 
 class DatabaseManager : public QObject
 {
@@ -25,6 +27,7 @@ public:
 private:
     void CreateDatabase();
     void ConnectDatabase();
+    void CreateTables();
 
 };
 

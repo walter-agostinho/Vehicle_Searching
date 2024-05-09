@@ -1,6 +1,6 @@
 #include "login.h"
 #include "ui_login.h"
-#include <QMessageBox>
+#include <QSqlRelation>
 
 Login::Login(QWidget *parent, std::shared_ptr<DatabaseManager> databaseManager)
     : QDialog(parent), databaseManager(databaseManager)

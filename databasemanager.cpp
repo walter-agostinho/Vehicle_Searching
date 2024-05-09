@@ -4,6 +4,7 @@ DatabaseManager::DatabaseManager()
 {
     this->CreateDatabase();
     this->ConnectDatabase();
+    this->CreateTables();
 }
 
 void DatabaseManager::GetConnectionStatus(QString &status)
@@ -71,6 +72,8 @@ void DatabaseManager::CreateTables()
             qDebug() << "Tables already created";
         }
     }
+    else
+    {
     query.prepare("CREATE TABLE users ("
                   "id INT PRIMARY KEY AUTO_INCREMENT,"
                   "user VARCHAR NOT NULL UNIQUE, "
@@ -80,20 +83,37 @@ void DatabaseManager::CreateTables()
 
     if(query.exec())
     {
-        qDebug() << "Tabela users criada";
+        qDebug() << "users table created";
     }
 
     query.prepare("CREATE TABLE vehicles ("
                   "id INT PRIMARY KEY AUTO_INCREMENT,"
-                  "marca VARCHAR NOT NULL UNIQUE, "
+                  "brand VARCHAR NOT NULL UNIQUE, "
+                  "code_fipe VARCHAR NOT NULL, "
+                  "fuel VARCHAR NOT NULL, "
                   "model VARCHAR NOT NULL, "
-                  "year DATETIME DEFAULT CURRENT_TIMESTAMP"
+                  "model_year VARCHAR NOT NULL, "
+                  "price VARCHAR NOT NULL, "
+                  "price_history VARCHAR NULL, "
+                  "month_reference VARCHAR NOT NULL, "
+                  "vehicle_type VARCHAR NOT NULL, "
                   ");");
 
     if(query.exec())
     {
-        qDebug() << "Tabela users criada";
+        qDebug() << "vehicles table created";
     }
 
+    query.prepare("CREATE TABLE costs ("
+                  "id INT PRIMARY KEY AUTO_INCREMENT,"
+                  "description VARCHAR NOT NULL UNIQUE, "
+                  "price INT NOT NULL, "
+                  "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP"
+                  ");");
+
+    if(query.exec())
+    {
+        qDebug() << "costs table created";
+    }
 
 }
