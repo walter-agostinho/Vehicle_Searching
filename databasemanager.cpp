@@ -4,7 +4,11 @@ DatabaseManager::DatabaseManager()
 {
     this->CreateDatabase();
     this->ConnectDatabase();
-    this->CreateTables();
+    if(!this->AreTablesCreated())
+    {
+      this->CreateTables();
+    }
+
 }
 
 void DatabaseManager::GetConnectionStatus(QString &status)
@@ -53,41 +57,49 @@ void DatabaseManager::ConnectDatabase()
     }
 }
 
-void DatabaseManager::CreateTables()
+bool DatabaseManager::AreTablesCreated()
 {
     QSqlQuery query(this->db);
-    query.prepare("SELECT name FROM sqlite_master WHERE type='table' "
-                  "AND name=users AND name=vehicles");
+    query.prepare("SELECT COUNT(*) FROM sqlite_master WHERE type='table';");
+
     if(query.exec())
     {
-        int tableCount{0};
-        for(int i=0; i<TABLE_COUNT; i++)
-        {
-            query.next();
-            tableCount++;
-        }
-
-        if(tableCount == TABLE_COUNT)
+        query.next();
+        if(query.value(0) == TABLE_COUNT)
         {
             qDebug() << "Tables already created";
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
     else
     {
+        qDebug() << "AreTablesCreated - ERRO =" << query.lastError();
+        return false;
+    }
+}
+
+void DatabaseManager::CreateTables()
+{
+    QSqlQuery query(this->db);
     query.prepare("CREATE TABLE users ("
-                  "id INT PRIMARY KEY AUTO_INCREMENT,"
+                  "id INT PRIMARY KEY, "
                   "user VARCHAR NOT NULL UNIQUE, "
                   "pass VARCHAR NOT NULL, "
-                  "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP"
+                  "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP "
                   ");");
 
-    if(query.exec())
+    if(!query.exec())
     {
-        qDebug() << "users table created";
+        qDebug() << "CreateTables - ERRO =" << query.lastError();
     }
 
     query.prepare("CREATE TABLE vehicles ("
-                  "id INT PRIMARY KEY AUTO_INCREMENT,"
+                  "id INT PRIMARY KEY, "
+                  "user_id INTEGER NOT NULL, "
                   "brand VARCHAR NOT NULL UNIQUE, "
                   "code_fipe VARCHAR NOT NULL, "
                   "fuel VARCHAR NOT NULL, "
@@ -97,23 +109,26 @@ void DatabaseManager::CreateTables()
                   "price_history VARCHAR NULL, "
                   "month_reference VARCHAR NOT NULL, "
                   "vehicle_type VARCHAR NOT NULL, "
+                  "FOREIGN KEY (user_id) REFERENCES users(id) "
                   ");");
 
-    if(query.exec())
+    if(!query.exec())
     {
-        qDebug() << "vehicles table created";
+        qDebug() << "CreateTables - ERRO =" << query.lastError();
     }
 
     query.prepare("CREATE TABLE costs ("
-                  "id INT PRIMARY KEY AUTO_INCREMENT,"
-                  "description VARCHAR NOT NULL UNIQUE, "
+                  "id INT PRIMARY KEY, "
+                  "vehicle_id INTEGER NOT NULL, "
+                  "description VARCHAR NOT NULL, "
                   "price INT NOT NULL, "
-                  "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP"
+                  "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                  "FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) "
                   ");");
 
-    if(query.exec())
+    if(!query.exec())
     {
-        qDebug() << "costs table created";
+        qDebug() << "CreateTables - ERRO =" << query.lastError();
     }
 
 }

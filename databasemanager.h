@@ -27,6 +27,7 @@ public:
 private:
     void CreateDatabase();
     void ConnectDatabase();
+    bool AreTablesCreated();
     void CreateTables();
 
 };
