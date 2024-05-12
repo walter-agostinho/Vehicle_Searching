@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QDir>
 #include <QSqlQuery>
+#include <QCryptographicHash>
 
 const int TABLE_COUNT = 3;
 
@@ -23,6 +24,8 @@ public:
     void extracted();
     DatabaseManager();
     void GetConnectionStatus(QString &status);
+    bool CreateAccount(const QString &user, const QString &password);
+    bool CheckCredentials(const QString &user, const QString &password);
 
 private:
     void CreateDatabase();

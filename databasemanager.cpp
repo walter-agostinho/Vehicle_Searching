@@ -16,6 +16,48 @@ void DatabaseManager::GetConnectionStatus(QString &status)
     status = this->connectionStatus;
 }
 
+bool DatabaseManager::CreateAccount(const QString &user, const QString &password)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(password.toUtf8());
+    QString hashedPassword = hash.result().toHex();
+
+    QSqlQuery query(this->db);
+    query.prepare("INSERT INTO users(user, password) VALUES (:user, :password);");
+    query.bindValue(":user", user);
+    query.bindValue(":password", hashedPassword);
+
+    if(!query.exec())
+    {
+        qDebug() << "CreateAccount - ERRO =" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+bool DatabaseManager::CheckCredentials(const QString &user, const QString &password)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(password.toUtf8());
+    QString hashedPassword = hash.result().toHex();
+
+    QSqlQuery query(this->db);
+    query.prepare("SELECT COUNT(*) FROM users WHERE user=:user AND password=:password;");
+    query.bindValue(":user", user);
+    query.bindValue(":password", hashedPassword);
+
+    if(query.exec())
+    {
+        query.next();
+        return query.value(0).toBool();
+    }
+    else
+    {
+        qDebug() << "CheckCredentials - ERRO =" << query.lastError();
+        return false;
+    }
+}
+
 void DatabaseManager::CreateDatabase()
 {
     QDir dir;
@@ -48,12 +90,12 @@ void DatabaseManager::ConnectDatabase()
     if(db.open())
     {
         qDebug() << "DATABASE CONNECTED";
-        this->connectionStatus = "CONECTADO";
+        this->connectionStatus = "🟢 CONECTADO";
     }
     else
     {
         qDebug() << "ERROR = " << this->db.lastError().databaseText();
-        this->connectionStatus = "DESCONECTADO - ERRO: " + this->db.lastError().databaseText();;
+        this->connectionStatus = "🔴 DESCONECTADO - ERRO: " + this->db.lastError().databaseText();;
     }
 }
 
@@ -86,9 +128,9 @@ void DatabaseManager::CreateTables()
 {
     QSqlQuery query(this->db);
     query.prepare("CREATE TABLE users ("
-                  "id INT PRIMARY KEY, "
+                  "id INTEGER PRIMARY KEY, "
                   "user VARCHAR NOT NULL UNIQUE, "
-                  "pass VARCHAR NOT NULL, "
+                  "password VARCHAR NOT NULL, "
                   "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP "
                   ");");
 
@@ -98,7 +140,7 @@ void DatabaseManager::CreateTables()
     }
 
     query.prepare("CREATE TABLE vehicles ("
-                  "id INT PRIMARY KEY, "
+                  "id INTEGER PRIMARY KEY, "
                   "user_id INTEGER NOT NULL, "
                   "brand VARCHAR NOT NULL UNIQUE, "
                   "code_fipe VARCHAR NOT NULL, "
@@ -118,10 +160,10 @@ void DatabaseManager::CreateTables()
     }
 
     query.prepare("CREATE TABLE costs ("
-                  "id INT PRIMARY KEY, "
+                  "id INTEGER PRIMARY KEY, "
                   "vehicle_id INTEGER NOT NULL, "
                   "description VARCHAR NOT NULL, "
-                  "price INT NOT NULL, "
+                  "price INTEGER NOT NULL, "
                   "date_creation DATETIME DEFAULT CURRENT_TIMESTAMP, "
                   "FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) "
                   ");");

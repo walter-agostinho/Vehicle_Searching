@@ -83,7 +83,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="userLineEdit"/>
       </item>
      </layout>
     </item>
@@ -113,13 +113,13 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="passwordLineEdit"/>
       </item>
      </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="loginButton">
    <property name="geometry">
     <rect>
      <x>200</x>
@@ -153,9 +153,9 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>lineEdit_2</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>userLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>loginButton</tabstop>
   <tabstop>createAccountButton</tabstop>
  </tabstops>
  <resources/>

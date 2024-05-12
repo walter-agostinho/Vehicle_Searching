@@ -17,7 +17,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void OnLoginSuccessful();
+
 private:
     Ui::MainWindow *ui;
+
+
 };
 #endif // MAINWINDOW_H
