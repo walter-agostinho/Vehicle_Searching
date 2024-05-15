@@ -90,12 +90,12 @@ void DatabaseManager::ConnectDatabase()
     if(db.open())
     {
         qDebug() << "DATABASE CONNECTED";
-        this->connectionStatus = "🟢 CONECTADO";
+        this->connectionStatus = "CONECTADO";
     }
     else
     {
         qDebug() << "ERROR = " << this->db.lastError().databaseText();
-        this->connectionStatus = "🔴 DESCONECTADO - ERRO: " + this->db.lastError().databaseText();;
+        this->connectionStatus = "DESCONECTADO - ERRO: " + this->db.lastError().databaseText();;
     }
 }
 

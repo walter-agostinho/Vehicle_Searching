@@ -9,12 +9,12 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     std::shared_ptr<DatabaseManager> databaseManager = std::make_shared<DatabaseManager>();
+    std::shared_ptr<ApiManager> api = std::make_shared<ApiManager>();
 
     Login login(nullptr, databaseManager);
-    MainWindow w;
+    MainWindow w(nullptr, api);
 
     QObject::connect(&login, &Login::LoginSuccessful, &w, &MainWindow::OnLoginSuccessful);
-
     login.show();
 
     return a.exec();
