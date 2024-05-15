@@ -12,7 +12,7 @@ class ApiManager : public QObject
 
 public:
     ApiManager();
-    void GetBrands(const QString vehicleType);
+    void GetBrands(const QString &vehicleType);
 
 public slots:
     void ManagerFinished(QNetworkReply *reply);

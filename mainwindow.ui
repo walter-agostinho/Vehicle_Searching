@@ -14,39 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QComboBox" name="brandComboBox">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>30</y>
-      <width>181</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="modelComboBox">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>30</y>
-      <width>181</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>10</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Tipo do Veículo</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="vehicleTableWidget">
     <property name="geometry">
      <rect>
@@ -57,15 +24,100 @@
      </rect>
     </property>
    </widget>
-   <widget class="QComboBox" name="vehicleTypeComboBox">
+   <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>30</y>
-      <width>161</width>
-      <height>24</height>
+      <x>500</x>
+      <y>100</y>
+      <width>91</width>
+      <height>16</height>
      </rect>
     </property>
+    <property name="text">
+     <string>Imagem veículo</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>231</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Informações</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Tipo do Veículo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="vehicleTypeComboBox"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Marca</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="brandComboBox"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Modelo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="modelComboBox"/>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Mês</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Ano</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_2"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

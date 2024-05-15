@@ -18,7 +18,7 @@ ApiManager::ApiManager()
     //         this, &ApiManager::slotSslErrors);
 }
 
-void ApiManager::GetBrands(const QString vehicleType)
+void ApiManager::GetBrands(const QString &vehicleType)
 {
     this->request.setUrl(QUrl("https://fipe.parallelum.com.br/api/v2/"+vehicleType+"/brands"));
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -44,7 +44,7 @@ void ApiManager::ManagerFinished(QNetworkReply *reply)
     }
 
     this->answer = reply->readAll();
-    qDebug() << answer;
+    qDebug() << this->answer;
 }
 
 void ApiManager::slotReadyRead()
