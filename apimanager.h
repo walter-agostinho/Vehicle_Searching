@@ -5,6 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QJsonDocument>
 
 class ApiManager : public QObject
 {
@@ -12,7 +13,8 @@ class ApiManager : public QObject
 
 public:
     ApiManager();
-    void GetBrands(const QString &vehicleType);
+    using ResponseCallback = std::function<void(QJsonDocument)>;
+    void GetBrands(const QString &vehicleType, ResponseCallback callback);
 
 public slots:
     void ManagerFinished(QNetworkReply *reply);
@@ -23,8 +25,8 @@ public slots:
 
 private:
     QNetworkAccessManager *manager;
+    QNetworkReply *reply;
     QNetworkRequest request;
-    QString answer;
 
     QString GetAnswer();
 

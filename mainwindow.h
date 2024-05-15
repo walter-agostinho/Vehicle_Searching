@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include "apimanager.h"
+#include <QJsonObject>
+#include <QJsonArray>
+
+class ApiManager;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +31,7 @@ private:
     std::shared_ptr<ApiManager> api;
 
     QString GetVehicleTypeTranslated(const QString &vehicleType);
+    void FillBrands(QJsonDocument &brands);
 
 
 };
