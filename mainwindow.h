@@ -25,6 +25,7 @@ public:
 public slots:
     void OnLoginSuccessful();
     void VehicleTypeChosen(int index);
+    void BrandChosen(int index);
 
 private:
     Ui::MainWindow *ui;
@@ -32,6 +33,7 @@ private:
 
     QString GetVehicleTypeTranslated(const QString &vehicleType);
     void FillBrands(QJsonDocument &brands);
+    void FillModels(QJsonDocument &models);
 
 
 };
