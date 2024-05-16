@@ -21,6 +21,7 @@ public:
     using ResponseCallback = std::function<void(QJsonDocument)>;
     void GetBrands(const QString &vehicleType, ResponseCallback callback);
     void GetModels(const QString &vehicleType, const QString &brandId, ResponseCallback callback);
+    void GetMonthReferences(ResponseCallback callback);
 
 public slots:
     void ManagerFinished(QNetworkReply *reply);
@@ -31,7 +32,6 @@ public slots:
 
 private:
     QNetworkAccessManager *manager;
-    QNetworkReply *reply;
     QNetworkRequest request;
 
     QString GetAnswer();

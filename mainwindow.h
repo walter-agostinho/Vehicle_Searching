@@ -26,14 +26,18 @@ public slots:
     void OnLoginSuccessful();
     void VehicleTypeChosen(int index);
     void BrandChosen(int index);
+    void YearReferenceChosen(int index);
 
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<ApiManager> api;
 
+    void SetupMonthReferences();
+    void SetupVehicleType();
     QString GetVehicleTypeTranslated(const QString &vehicleType);
     void FillBrands(QJsonDocument &brands);
     void FillModels(QJsonDocument &models);
+    void FillMonthReferences(QJsonDocument &yearReferences);
 
 
 };
