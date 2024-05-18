@@ -5,6 +5,7 @@
 #include "apimanager.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QTimer>
 
 class ApiManager;
 
@@ -24,6 +25,7 @@ public:
 
 public slots:
     void OnLoginSuccessful();
+    void enableConnects();
     void VehicleTypeChosen(int index);
     void BrandChosen(int index);
     void YearReferenceChosen(int index);
