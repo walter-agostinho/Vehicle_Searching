@@ -28,6 +28,7 @@ public slots:
     void enableConnects();
     void VehicleTypeChosen(int index);
     void BrandChosen(int index);
+    void ModelChosen(int index);
     void YearReferenceChosen(int index);
 
 private:
@@ -39,7 +40,8 @@ private:
     QString GetVehicleTypeTranslated(const QString &vehicleType);
     void FillBrands(QJsonDocument &brands);
     void FillModels(QJsonDocument &models);
-    void FillMonthReferences(QJsonDocument &yearReferences);
+    void FillYearsByModel(QJsonDocument &years);
+    void FillMonthReferences(QJsonDocument &monthReferences);
 
 
 };

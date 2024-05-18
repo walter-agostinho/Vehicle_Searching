@@ -28,6 +28,7 @@ void MainWindow::enableConnects()
     connect(ui->monthReferenceComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::YearReferenceChosen);
     connect(ui->vehicleTypeComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::VehicleTypeChosen);
     connect(ui->brandComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::BrandChosen);
+    connect(ui->modelComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::ModelChosen);
 
     this->SetupVehicleType();
 }
@@ -58,10 +59,27 @@ void MainWindow::BrandChosen(int index)
     }
 }
 
+void MainWindow::ModelChosen(int index)
+{
+    ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
+    {
+        FillYearsByModel(answer);
+    };
+
+    QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
+    QString brandId = ui->brandComboBox->currentData(Qt::UserRole).toString();
+    QString modelId = ui->modelComboBox->currentData(Qt::UserRole).toString();
+    if(!vehicleType.isEmpty() && !brandId.isEmpty() && !modelId.isEmpty())
+    {
+        this->api->GetYearsByModel(vehicleType, brandId, modelId, callback);
+    }
+}
+
 void MainWindow::YearReferenceChosen(int index)
 {
     this->VehicleTypeChosen(index);
     this->BrandChosen(index);
+    this->ModelChosen(index);
 }
 
 void MainWindow::SetupMonthReferences()
@@ -131,14 +149,32 @@ void MainWindow::FillModels(QJsonDocument &models)
     }
 }
 
-void MainWindow::FillMonthReferences(QJsonDocument &yearReferences)
+void MainWindow::FillYearsByModel(QJsonDocument &years)
+{
+    ui->yearsByModelComboBox->clear();
+    if (!years.isNull() && years.isArray())
+    {
+        QJsonArray jsonArray = years.array();
+
+        QJsonValue value = jsonArray.first();
+        for (const QJsonValue &value : jsonArray)
+        {
+            QString name = value["name"].toString();
+            QString code = value["code"].toString();
+
+            ui->yearsByModelComboBox->addItem(name, code);
+        }
+    }
+}
+
+void MainWindow::FillMonthReferences(QJsonDocument &monthReferences)
 {
     ui->monthReferenceComboBox->clear();
-    if (!yearReferences.isNull() && yearReferences.isArray())
+    if (!monthReferences.isNull() && monthReferences.isArray())
     {
         ui->monthReferenceComboBox->addItem(QString("Todos"), QString(""));
 
-        QJsonArray jsonArray = yearReferences.array();
+        QJsonArray jsonArray = monthReferences.array();
 
         QJsonValue value = jsonArray.first();
         for (const QJsonValue &value : jsonArray)

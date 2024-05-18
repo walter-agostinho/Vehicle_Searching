@@ -21,6 +21,9 @@ public:
     using ResponseCallback = std::function<void(QJsonDocument)>;
     void GetBrands(const QString &vehicleType, ResponseCallback callback);
     void GetModels(const QString &vehicleType, const QString &brandId, ResponseCallback callback);
+    void GetYearsByModel(const QString &vehicleType, const QString &brandId, const QString &modelId,
+                         ResponseCallback callback);
+
     void GetMonthReferences(ResponseCallback callback);
 
 public slots:
