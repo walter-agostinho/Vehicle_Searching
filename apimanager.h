@@ -25,6 +25,8 @@ public:
                    ResponseCallback callback);
     void GetYearsByModel(const QString &vehicleType, const QString &brandId, const QString &modelId,
                          const QString &monthReference, ResponseCallback callback);
+    void GetFipeInfo(const QString &vehicleType, const QString &brandId, const QString &modelId,
+                     const QString &monthReference, const QString &yearId, ResponseCallback callback);
 
     void GetMonthReferences(ResponseCallback callback);
 
@@ -39,6 +41,7 @@ private:
     QNetworkAccessManager *manager;
     QNetworkRequest request;
     void SetJsonCallback(QNetworkReply *reply, ResponseCallback callback);
+    void SetMonthReferenceParameter(const QString &monthReference, QUrl &url);
 
 };
 

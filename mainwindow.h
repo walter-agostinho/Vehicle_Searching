@@ -30,6 +30,7 @@ public slots:
     void BrandChosen(int index);
     void ModelChosen(int index);
     void YearReferenceChosen(int index);
+    void GetFipeInfo();
 
 private:
     Ui::MainWindow *ui;
@@ -42,7 +43,7 @@ private:
     void FillModels(QJsonDocument &models);
     void FillYearsByModel(QJsonDocument &years);
     void FillMonthReferences(QJsonDocument &monthReferences);
-
+    void FillFipeInfo(QJsonDocument &fipeInfo);
 
 };
 #endif // MAINWINDOW_H

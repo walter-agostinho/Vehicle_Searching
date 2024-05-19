@@ -29,6 +29,7 @@ void MainWindow::enableConnects()
     connect(ui->vehicleTypeComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::VehicleTypeChosen);
     connect(ui->brandComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::BrandChosen);
     connect(ui->modelComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::ModelChosen);
+    connect(ui->searchFipeButton, &QPushButton::clicked, this, &MainWindow::GetFipeInfo);
 
     this->SetupVehicleType();
 }
@@ -86,6 +87,25 @@ void MainWindow::YearReferenceChosen(int index)
     this->VehicleTypeChosen(index);
     this->BrandChosen(index);
     this->ModelChosen(index);
+}
+
+void MainWindow::GetFipeInfo()
+{
+    ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
+    {
+        FillFipeInfo(answer);
+    };
+
+    QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
+    QString brandId = ui->brandComboBox->currentData(Qt::UserRole).toString();
+    QString modelId = ui->modelComboBox->currentData(Qt::UserRole).toString();
+    QString yearId = ui->yearsByModelComboBox->currentData(Qt::UserRole).toString();
+    QString monthReference = ui->monthReferenceComboBox->currentData(Qt::UserRole).toString();
+
+    if(!vehicleType.isEmpty() && !brandId.isEmpty() && !modelId.isEmpty() && !yearId.isEmpty())
+    {
+        this->api->GetFipeInfo(vehicleType, brandId, modelId, monthReference, yearId, callback);
+    }
 }
 
 void MainWindow::SetupMonthReferences()
@@ -190,5 +210,22 @@ void MainWindow::FillMonthReferences(QJsonDocument &monthReferences)
 
             ui->monthReferenceComboBox->addItem(month, code);
         }
+    }
+}
+
+void MainWindow::FillFipeInfo(QJsonDocument &fipeInfo)
+{
+    ui->vehiclePlainTextEdit->clear();
+    if (!fipeInfo.isNull() && fipeInfo.isObject())
+    {
+        QJsonObject jsonObject = fipeInfo.object();
+
+        ui->vehiclePlainTextEdit->appendPlainText("Marca: " + jsonObject.value("brand").toString());
+        ui->vehiclePlainTextEdit->appendPlainText("Codigo da Fipe: " + jsonObject.value("codeFipe").toString());
+        ui->vehiclePlainTextEdit->appendPlainText("Combustível: " + jsonObject.value("fuel").toString());
+        ui->vehiclePlainTextEdit->appendPlainText("Modelo: " + jsonObject.value("model").toString());
+        ui->vehiclePlainTextEdit->appendPlainText("Ano do modelo: " + QString::number(jsonObject.value("modelYear").toInt()));
+        ui->vehiclePlainTextEdit->appendPlainText("Preço: " + jsonObject.value("price").toString());
+        ui->vehiclePlainTextEdit->appendPlainText("Mês de Referência: " + jsonObject.value("referenceMonth").toString());
     }
 }

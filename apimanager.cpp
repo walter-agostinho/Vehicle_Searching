@@ -72,6 +72,25 @@ void ApiManager::GetYearsByModel(const QString &vehicleType, const QString &bran
     });
 }
 
+void ApiManager::GetFipeInfo(const QString &vehicleType, const QString &brandId, const QString &modelId,
+                             const QString &monthReference, const QString &yearId, ResponseCallback callback)
+{
+    QUrl url = QUrl("https://fipe.parallelum.com.br/api/v2/"+vehicleType+"/brands/"+brandId+"/models/"
+                    +modelId+"/years/"+yearId);
+
+    this->SetMonthReferenceParameter(monthReference, url);
+
+    this->request.setUrl(url);
+    this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    this->request.setRawHeader("X-Subscription-Token", Token);
+    qDebug() << "REQUEST = " << url;
+    QNetworkReply *reply = this->manager->get(this->request);
+
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetJsonCallback(reply, callback);
+    });
+}
+
 void ApiManager::GetMonthReferences(ResponseCallback callback)
 {
     this->request.setUrl(QUrl("https://fipe.parallelum.com.br/api/v2/references"));
