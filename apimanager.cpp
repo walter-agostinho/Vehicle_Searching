@@ -35,17 +35,8 @@ void ApiManager::GetBrands(const QString &vehicleType, const QString &monthRefer
 
     QNetworkReply *reply = this->manager->get(this->request);
 
-    connect(reply, &QNetworkReply::finished, this, [reply, callback]{
-        if (reply->error())
-        {
-            qDebug() << reply->errorString();
-            return;
-        }
-
-        QByteArray answer = reply->readAll();
-        QJsonDocument json = QJsonDocument::fromJson(answer);
-        callback(json);
-        reply->deleteLater();
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetJsonCallback(reply, callback);
     });
 }
 
@@ -67,17 +58,8 @@ void ApiManager::GetModels(const QString &vehicleType, const QString &brandId, c
 
     QNetworkReply *reply = this->manager->get(this->request);
 
-    connect(reply, &QNetworkReply::finished, this, [reply, callback]{
-        if (reply->error())
-        {
-            qDebug() << reply->errorString();
-            return;
-        }
-
-        QByteArray answer = reply->readAll();
-        QJsonDocument json = QJsonDocument::fromJson(answer);
-        callback(json);
-        reply->deleteLater();
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetJsonCallback(reply, callback);
     });
 }
 
@@ -100,17 +82,8 @@ void ApiManager::GetYearsByModel(const QString &vehicleType, const QString &bran
 
     QNetworkReply *reply = this->manager->get(this->request);
 
-    connect(reply, &QNetworkReply::finished, this, [reply, callback]{
-        if (reply->error())
-        {
-            qDebug() << reply->errorString();
-            return;
-        }
-
-        QByteArray answer = reply->readAll();
-        QJsonDocument json = QJsonDocument::fromJson(answer);
-        callback(json);
-        reply->deleteLater();
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetJsonCallback(reply, callback);
     });
 }
 
@@ -122,17 +95,8 @@ void ApiManager::GetMonthReferences(ResponseCallback callback)
 
     QNetworkReply *reply = this->manager->get(this->request);
 
-    connect(reply, &QNetworkReply::finished, this, [reply, callback]{
-        if (reply->error())
-        {
-            qDebug() << reply->errorString();
-            return;
-        }
-
-        QByteArray answer = reply->readAll();
-        QJsonDocument json = QJsonDocument::fromJson(answer);
-        callback(json);
-        reply->deleteLater();
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetJsonCallback(reply, callback);
     });
 }
 
@@ -159,4 +123,18 @@ void ApiManager::slotError(QNetworkReply::NetworkError)
 void ApiManager::slotSslErrors(const QList<QSslError> &errors)
 {
     qDebug() << "AQUI 3";
+}
+
+void ApiManager::SetJsonCallback(QNetworkReply *reply, ResponseCallback callback)
+{
+    if (reply->error())
+    {
+        qDebug() << reply->errorString();
+        return;
+    }
+
+    QByteArray answer = reply->readAll();
+    QJsonDocument json = QJsonDocument::fromJson(answer);
+    callback(json);
+    reply->deleteLater();
 }

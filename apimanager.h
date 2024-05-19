@@ -38,9 +38,7 @@ public slots:
 private:
     QNetworkAccessManager *manager;
     QNetworkRequest request;
-
-    QString GetAnswer();
-
+    void SetJsonCallback(QNetworkReply *reply, ResponseCallback callback);
 
 };
 
