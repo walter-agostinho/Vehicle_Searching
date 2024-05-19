@@ -34,19 +34,6 @@
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
-  <widget class="QPushButton" name="createAccountButton">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>10</y>
-     <width>80</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Criar Conta</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
@@ -151,12 +138,24 @@
     <string>TextLabel</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="createAccountButton">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>10</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Criar Conta</string>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>userLineEdit</tabstop>
   <tabstop>passwordLineEdit</tabstop>
   <tabstop>loginButton</tabstop>
-  <tabstop>createAccountButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -22,12 +22,7 @@ void ApiManager::GetBrands(const QString &vehicleType, const QString &monthRefer
 {
     QUrl url = QUrl("https://fipe.parallelum.com.br/api/v2/"+vehicleType+"/brands");
 
-    if(!monthReference.isEmpty())
-    {
-        QUrlQuery query(url.query());
-        query.addQueryItem("reference", monthReference);
-        url.setQuery(query);
-    }
+    this->SetMonthReferenceParameter(monthReference, url);
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -45,12 +40,7 @@ void ApiManager::GetModels(const QString &vehicleType, const QString &brandId, c
 {
     QUrl url = QUrl("https://fipe.parallelum.com.br/api/v2/"+vehicleType+"/brands/"+brandId+"/models");
 
-    if(!monthReference.isEmpty())
-    {
-        QUrlQuery query(url.query());
-        query.addQueryItem("reference", monthReference);
-        url.setQuery(query);
-    }
+    this->SetMonthReferenceParameter(monthReference, url);
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -69,12 +59,7 @@ void ApiManager::GetYearsByModel(const QString &vehicleType, const QString &bran
     QUrl url = QUrl("https://fipe.parallelum.com.br/api/v2/"+vehicleType+"/brands/"+brandId+"/models/"
                     +modelId+"/years");
 
-    if(!monthReference.isEmpty())
-    {
-        QUrlQuery query(url.query());
-        query.addQueryItem("reference", monthReference);
-        url.setQuery(query);
-    }
+    this->SetMonthReferenceParameter(monthReference, url);
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -137,4 +122,14 @@ void ApiManager::SetJsonCallback(QNetworkReply *reply, ResponseCallback callback
     QJsonDocument json = QJsonDocument::fromJson(answer);
     callback(json);
     reply->deleteLater();
+}
+
+void ApiManager::SetMonthReferenceParameter(const QString &monthReference, QUrl &url)
+{
+    if(!monthReference.isEmpty())
+    {
+        QUrlQuery query(url.query());
+        query.addQueryItem("reference", monthReference);
+        url.setQuery(query);
+    }
 }
