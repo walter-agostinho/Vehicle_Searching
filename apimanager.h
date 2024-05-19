@@ -6,6 +6,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QJsonDocument>
+#include <QUrlQuery>
 
 const QByteArray Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyM2E"
                          "3MDBhMS0wYmRmLTRjOGMtOWE3Ni03MmU5YzllYzE3NTkiLCJlbWFpbCI6IndhbHR"
@@ -19,10 +20,11 @@ class ApiManager : public QObject
 public:
     ApiManager();
     using ResponseCallback = std::function<void(QJsonDocument)>;
-    void GetBrands(const QString &vehicleType, ResponseCallback callback);
-    void GetModels(const QString &vehicleType, const QString &brandId, ResponseCallback callback);
+    void GetBrands(const QString &vehicleType, const QString &monthReference, ResponseCallback callback);
+    void GetModels(const QString &vehicleType, const QString &brandId, const QString &monthReference,
+                   ResponseCallback callback);
     void GetYearsByModel(const QString &vehicleType, const QString &brandId, const QString &modelId,
-                         ResponseCallback callback);
+                         const QString &monthReference, ResponseCallback callback);
 
     void GetMonthReferences(ResponseCallback callback);
 

@@ -41,7 +41,11 @@ void MainWindow::VehicleTypeChosen(int index)
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
-    this->api->GetBrands(vehicleType, callback);
+    QString monthReference = ui->monthReferenceComboBox->currentData(Qt::UserRole).toString();
+    if(!vehicleType.isEmpty())
+    {
+        this->api->GetBrands(vehicleType, monthReference, callback);
+    }
 }
 
 void MainWindow::BrandChosen(int index)
@@ -53,9 +57,10 @@ void MainWindow::BrandChosen(int index)
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
     QString brandId = ui->brandComboBox->currentData(Qt::UserRole).toString();
+    QString monthReference = ui->monthReferenceComboBox->currentData(Qt::UserRole).toString();
     if(!vehicleType.isEmpty() && !brandId.isEmpty())
     {
-        this->api->GetModels(vehicleType, brandId, callback);
+        this->api->GetModels(vehicleType, brandId, monthReference, callback);
     }
 }
 
@@ -69,9 +74,10 @@ void MainWindow::ModelChosen(int index)
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
     QString brandId = ui->brandComboBox->currentData(Qt::UserRole).toString();
     QString modelId = ui->modelComboBox->currentData(Qt::UserRole).toString();
+    QString monthReference = ui->monthReferenceComboBox->currentData(Qt::UserRole).toString();
     if(!vehicleType.isEmpty() && !brandId.isEmpty() && !modelId.isEmpty())
     {
-        this->api->GetYearsByModel(vehicleType, brandId, modelId, callback);
+        this->api->GetYearsByModel(vehicleType, brandId, modelId, monthReference, callback);
     }
 }
 
