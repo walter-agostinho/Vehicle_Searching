@@ -32,7 +32,7 @@
      <rect>
       <x>30</x>
       <y>10</y>
-      <width>251</width>
+      <width>271</width>
       <height>331</height>
      </rect>
     </property>
@@ -108,11 +108,22 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="searchFipeButton">
-       <property name="text">
-        <string>Buscar FIPE</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="searchFipeButton">
+         <property name="text">
+          <string>Buscar FIPE</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="priceHistoryButton">
+         <property name="text">
+          <string>Histórico de Preço</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -120,6 +131,16 @@
     <property name="geometry">
      <rect>
       <x>40</x>
+      <y>370</y>
+      <width>361</width>
+      <height>191</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="priceHistoryPlainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
       <y>370</y>
       <width>361</width>
       <height>191</height>

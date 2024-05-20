@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QTimer>
+#include <QMessageBox>
 
 class ApiManager;
 
@@ -31,10 +32,12 @@ public slots:
     void ModelChosen(int index);
     void YearReferenceChosen(int index);
     void GetFipeInfo();
+    void GetModelPriceHistory();
 
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<ApiManager> api;
+    QString currentFipeCode;
 
     void SetupMonthReferences();
     void SetupVehicleType();
@@ -44,6 +47,7 @@ private:
     void FillYearsByModel(QJsonDocument &years);
     void FillMonthReferences(QJsonDocument &monthReferences);
     void FillFipeInfo(QJsonDocument &fipeInfo);
+    void FillModelPriceHistory(QJsonDocument &fipeInfo);
 
 };
 #endif // MAINWINDOW_H

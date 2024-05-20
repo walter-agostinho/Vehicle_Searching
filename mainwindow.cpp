@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent, std::shared_ptr<ApiManager> api)
 
     QTimer::singleShot(2000, this, &MainWindow::enableConnects);
 
+    ui->vehiclePlainTextEdit->setReadOnly(true);
+    ui->priceHistoryPlainTextEdit->setReadOnly(true);
     this->SetupMonthReferences();
 }
 
@@ -30,6 +32,7 @@ void MainWindow::enableConnects()
     connect(ui->brandComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::BrandChosen);
     connect(ui->modelComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::ModelChosen);
     connect(ui->searchFipeButton, &QPushButton::clicked, this, &MainWindow::GetFipeInfo);
+    connect(ui->priceHistoryButton, &QPushButton::clicked, this, &MainWindow::GetModelPriceHistory);
 
     this->SetupVehicleType();
 }
@@ -38,7 +41,7 @@ void MainWindow::VehicleTypeChosen(int index)
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
-        FillBrands(answer);
+        this->FillBrands(answer);
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
@@ -53,7 +56,7 @@ void MainWindow::BrandChosen(int index)
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
-        FillModels(answer);
+        this->FillModels(answer);
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
@@ -69,7 +72,7 @@ void MainWindow::ModelChosen(int index)
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
-        FillYearsByModel(answer);
+        this->FillYearsByModel(answer);
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
@@ -93,7 +96,7 @@ void MainWindow::GetFipeInfo()
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
-        FillFipeInfo(answer);
+        this->FillFipeInfo(answer);
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
@@ -108,11 +111,33 @@ void MainWindow::GetFipeInfo()
     }
 }
 
+void MainWindow::GetModelPriceHistory()
+{
+    ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
+    {
+        this->FillModelPriceHistory(answer);
+    };
+
+    QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
+    QString yearId = ui->yearsByModelComboBox->currentData(Qt::UserRole).toString();
+    QString monthReference = ui->monthReferenceComboBox->currentData(Qt::UserRole).toString();
+
+    if(this->currentFipeCode.isEmpty())
+    {
+        QMessageBox::information(this, "ATENÇÃO", "Necessário buscar a FIPE antes");
+    }
+
+    if(!vehicleType.isEmpty() && !yearId.isEmpty())
+    {
+        this->api->GetModelPriceHistory(vehicleType, this->currentFipeCode,  yearId, monthReference, callback);
+    }
+}
+
 void MainWindow::SetupMonthReferences()
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
-        FillMonthReferences(answer);
+        this->FillMonthReferences(answer);
     };
     this->api->GetMonthReferences(callback);
 }
@@ -146,7 +171,6 @@ void MainWindow::FillBrands(QJsonDocument &brands)
     {
         QJsonArray jsonArray = brands.array();
 
-        QJsonValue value = jsonArray.first();
         for (const QJsonValue &value : jsonArray)
         {
             QString name = value["name"].toString();
@@ -164,7 +188,6 @@ void MainWindow::FillModels(QJsonDocument &models)
     {
         QJsonArray jsonArray = models.array();
 
-        QJsonValue value = jsonArray.first();
         for (const QJsonValue &value : jsonArray)
         {
             QString name = value["name"].toString();
@@ -182,7 +205,6 @@ void MainWindow::FillYearsByModel(QJsonDocument &years)
     {
         QJsonArray jsonArray = years.array();
 
-        QJsonValue value = jsonArray.first();
         for (const QJsonValue &value : jsonArray)
         {
             QString name = value["name"].toString();
@@ -202,7 +224,6 @@ void MainWindow::FillMonthReferences(QJsonDocument &monthReferences)
 
         QJsonArray jsonArray = monthReferences.array();
 
-        QJsonValue value = jsonArray.first();
         for (const QJsonValue &value : jsonArray)
         {
             QString month = value["month"].toString();
@@ -220,12 +241,38 @@ void MainWindow::FillFipeInfo(QJsonDocument &fipeInfo)
     {
         QJsonObject jsonObject = fipeInfo.object();
 
+        this->currentFipeCode = jsonObject.value("codeFipe").toString();
+
         ui->vehiclePlainTextEdit->appendPlainText("Marca: " + jsonObject.value("brand").toString());
-        ui->vehiclePlainTextEdit->appendPlainText("Codigo da Fipe: " + jsonObject.value("codeFipe").toString());
+        ui->vehiclePlainTextEdit->appendPlainText("Codigo da Fipe: " + this->currentFipeCode);
         ui->vehiclePlainTextEdit->appendPlainText("Combustível: " + jsonObject.value("fuel").toString());
         ui->vehiclePlainTextEdit->appendPlainText("Modelo: " + jsonObject.value("model").toString());
         ui->vehiclePlainTextEdit->appendPlainText("Ano do modelo: " + QString::number(jsonObject.value("modelYear").toInt()));
         ui->vehiclePlainTextEdit->appendPlainText("Preço: " + jsonObject.value("price").toString());
         ui->vehiclePlainTextEdit->appendPlainText("Mês de Referência: " + jsonObject.value("referenceMonth").toString());
+    }
+}
+
+void MainWindow::FillModelPriceHistory(QJsonDocument &fipeInfo)
+{
+    ui->priceHistoryPlainTextEdit->clear();
+    if (!fipeInfo.isNull() && fipeInfo.isObject())
+    {
+
+        QJsonObject jsonObject = fipeInfo.object();
+        QJsonArray priceHistory = jsonObject["priceHistory"].toArray();
+
+        ui->priceHistoryPlainTextEdit->appendPlainText("Histórico de Preço");
+        ui->priceHistoryPlainTextEdit->appendPlainText("");
+
+        for (const QJsonValue &value : priceHistory)
+        {
+            QString price = value["price"].toString();
+            QString month = value["month"].toString();
+
+            ui->priceHistoryPlainTextEdit->appendPlainText("Preço: " + price);
+            ui->priceHistoryPlainTextEdit->appendPlainText("Mês: " + month);
+            ui->priceHistoryPlainTextEdit->appendPlainText("");
+        }
     }
 }

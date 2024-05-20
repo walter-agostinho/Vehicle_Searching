@@ -21,12 +21,18 @@ public:
     ApiManager();
     using ResponseCallback = std::function<void(QJsonDocument)>;
     void GetBrands(const QString &vehicleType, const QString &monthReference, ResponseCallback callback);
+
     void GetModels(const QString &vehicleType, const QString &brandId, const QString &monthReference,
                    ResponseCallback callback);
+
     void GetYearsByModel(const QString &vehicleType, const QString &brandId, const QString &modelId,
                          const QString &monthReference, ResponseCallback callback);
+
     void GetFipeInfo(const QString &vehicleType, const QString &brandId, const QString &modelId,
                      const QString &monthReference, const QString &yearId, ResponseCallback callback);
+
+    void GetModelPriceHistory(const QString &vehicleType, const QString &fipeCode, const QString &yearId,
+                              const QString &monthReference, ResponseCallback callback);
 
     void GetMonthReferences(ResponseCallback callback);
 
