@@ -42,12 +42,14 @@ private:
     void SetupMonthReferences();
     void SetupVehicleType();
     QString GetVehicleTypeTranslated(const QString &vehicleType);
+    void GetCarImage();
     void FillBrands(QJsonDocument &brands);
     void FillModels(QJsonDocument &models);
     void FillYearsByModel(QJsonDocument &years);
     void FillMonthReferences(QJsonDocument &monthReferences);
     void FillFipeInfo(QJsonDocument &fipeInfo);
     void FillModelPriceHistory(QJsonDocument &fipeInfo);
+    void fillCarImage(QJsonDocument carImage);
 
 };
 #endif // MAINWINDOW_H

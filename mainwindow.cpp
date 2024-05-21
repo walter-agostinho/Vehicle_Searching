@@ -97,6 +97,7 @@ void MainWindow::GetFipeInfo()
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
         this->FillFipeInfo(answer);
+        this->GetCarImage();
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
@@ -162,6 +163,15 @@ QString MainWindow::GetVehicleTypeTranslated(const QString &vehicleType)
     {
         return "cars";
     }
+}
+
+void MainWindow::GetCarImage()
+{
+    ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
+    {
+        this->fillCarImage(answer);
+    };
+    this->api->GetCarImage("carro", callback);
 }
 
 void MainWindow::FillBrands(QJsonDocument &brands)
@@ -275,4 +285,9 @@ void MainWindow::FillModelPriceHistory(QJsonDocument &fipeInfo)
             ui->priceHistoryPlainTextEdit->appendPlainText("");
         }
     }
+}
+
+void MainWindow::fillCarImage(QJsonDocument carImage)
+{
+
 }

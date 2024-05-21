@@ -122,6 +122,22 @@ void ApiManager::GetMonthReferences(ResponseCallback callback)
     });
 }
 
+void ApiManager::GetCarImage(const QString &search, ResponseCallback callback)
+{
+    QString teste = GOOGLE_SEARCH_API_KEY;
+    this->request.setUrl(QUrl("https://www.googleapis.com/customsearch/v1?key="+teste+
+                              "&cx="+ID_SEARCH_ENGINE+"&q="+search+"&searchType=image"));
+
+    this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    //this->request.setRawHeader("X-Subscription-Token", Token);
+    qWarning() << "REQUEST CARRO = " << this->request.url();
+    QNetworkReply *reply = this->manager->get(this->request);
+
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetJsonCallback(reply, callback);
+    });
+}
+
 void ApiManager::ManagerFinished(QNetworkReply *reply)
 {
     qDebug() << "AQUI 5";
@@ -157,6 +173,7 @@ void ApiManager::SetJsonCallback(QNetworkReply *reply, ResponseCallback callback
 
     QByteArray answer = reply->readAll();
     QJsonDocument json = QJsonDocument::fromJson(answer);
+    qWarning() << "RESPOSTA = " << answer;
     callback(json);
     reply->deleteLater();
 }
