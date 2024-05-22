@@ -171,7 +171,9 @@ void MainWindow::GetCarImageLinks()
     {
         this->FillCarImageLinks(answer);
     };
-    QString search = ui->brandComboBox->currentText() + " " + ui->modelComboBox->currentText();
+    QString search = ui->brandComboBox->currentText() + " " +
+                     ui->modelComboBox->currentText() + " " +
+                     ui->yearsByModelComboBox->currentText();
     this->api->GetCarImageLinks(search, callback);
 }
 
@@ -318,5 +320,7 @@ void MainWindow::ShowCarImage(QByteArray img)
 {
     QPixmap pixmap;
     pixmap.loadFromData(img);
-    ui->carImageLabel->setPixmap(pixmap);
+    QSize desiredSize(400, 300);
+    QPixmap scaledPixmap = pixmap.scaled(desiredSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+    ui->carImageLabel->setPixmap(scaledPixmap);
 }
