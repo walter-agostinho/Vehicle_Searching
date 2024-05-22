@@ -8,14 +8,6 @@
 #include <QJsonDocument>
 #include <QUrlQuery>
 
-const QByteArray Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyM2E"
-                         "3MDBhMS0wYmRmLTRjOGMtOWE3Ni03MmU5YzllYzE3NTkiLCJlbWFpbCI6IndhbHR"
-                         "lci5hZ29zdGluaG9Ab3V0bG9vay5jb20iLCJpYXQiOjE3MTU2MjE5MDh9.xgLxE"
-                         "WKQYuyYBpZes6I4DuQSgiA2rZ3dIu7Q-4wS7L8";
-
-const QString GOOGLE_SEARCH_API_KEY = "AIzaSyCgrzTn33eqwFfY7qtjz4CCab562IYF2dM";
-const QString ID_SEARCH_ENGINE = "a20665af4ceb54e8d";
-
 
 class ApiManager : public QObject
 {
@@ -24,6 +16,7 @@ class ApiManager : public QObject
 public:
     ApiManager();
     using ResponseCallback = std::function<void(QJsonDocument)>;
+    using ImageResponseCallback = std::function<void(QByteArray)>;
     void GetBrands(const QString &vehicleType, const QString &monthReference, ResponseCallback callback);
 
     void GetModels(const QString &vehicleType, const QString &brandId, const QString &monthReference,
@@ -40,7 +33,9 @@ public:
 
     void GetMonthReferences(ResponseCallback callback);
 
-    void GetCarImage(const QString &search , ResponseCallback callback);
+    void GetCarImageLinks(const QString &search , ResponseCallback callback);
+
+    void GetCarImage(const QString &imageLink, ImageResponseCallback callback);
 
 public slots:
     void ManagerFinished(QNetworkReply *reply);
@@ -53,8 +48,17 @@ private:
     QNetworkAccessManager *manager;
     QNetworkRequest request;
     void SetJsonCallback(QNetworkReply *reply, ResponseCallback callback);
+    void SetByteArrayCallback(QNetworkReply *reply, ImageResponseCallback callback);
     void SetMonthReferenceParameter(const QString &monthReference, QUrl &url);
+    void SetCustomSearchParameters(const QString &search, QUrl &url);
 
+    const QByteArray Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyM2E"
+                             "3MDBhMS0wYmRmLTRjOGMtOWE3Ni03MmU5YzllYzE3NTkiLCJlbWFpbCI6IndhbHR"
+                             "lci5hZ29zdGluaG9Ab3V0bG9vay5jb20iLCJpYXQiOjE3MTU2MjE5MDh9.xgLxE"
+                             "WKQYuyYBpZes6I4DuQSgiA2rZ3dIu7Q-4wS7L8";
+
+    const QString GOOGLE_SEARCH_API_KEY = "AIzaSyCgrzTn33eqwFfY7qtjz4CCab562IYF2dM";
+    const QString ID_SEARCH_ENGINE = "a20665af4ceb54e8d";
 };
 
 #endif // APIMANAGER_H

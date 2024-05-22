@@ -38,18 +38,20 @@ private:
     Ui::MainWindow *ui;
     std::shared_ptr<ApiManager> api;
     QString currentFipeCode;
+    std::vector<QString> carImageLinks;
 
     void SetupMonthReferences();
     void SetupVehicleType();
     QString GetVehicleTypeTranslated(const QString &vehicleType);
-    void GetCarImage();
+    void GetCarImageLinks();
+    void GetCarImageFromLink();
     void FillBrands(QJsonDocument &brands);
     void FillModels(QJsonDocument &models);
     void FillYearsByModel(QJsonDocument &years);
     void FillMonthReferences(QJsonDocument &monthReferences);
     void FillFipeInfo(QJsonDocument &fipeInfo);
     void FillModelPriceHistory(QJsonDocument &fipeInfo);
-    void fillCarImage(QJsonDocument carImage);
-
+    void FillCarImageLinks(QJsonDocument carImage);
+    void ShowCarImage(QByteArray img);
 };
 #endif // MAINWINDOW_H

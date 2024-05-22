@@ -14,13 +14,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="carImageLabel">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>100</y>
-      <width>91</width>
-      <height>16</height>
+      <x>430</x>
+      <y>20</y>
+      <width>330</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="text">
@@ -146,6 +146,32 @@
       <height>191</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>320</y>
+      <width>168</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="previousImageButton">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="nextImageButton">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

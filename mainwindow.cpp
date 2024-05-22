@@ -97,7 +97,7 @@ void MainWindow::GetFipeInfo()
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
         this->FillFipeInfo(answer);
-        this->GetCarImage();
+        this->GetCarImageLinks();
     };
 
     QString vehicleType = GetVehicleTypeTranslated(ui->vehicleTypeComboBox->currentText());
@@ -165,13 +165,23 @@ QString MainWindow::GetVehicleTypeTranslated(const QString &vehicleType)
     }
 }
 
-void MainWindow::GetCarImage()
+void MainWindow::GetCarImageLinks()
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
     {
-        this->fillCarImage(answer);
+        this->FillCarImageLinks(answer);
     };
-    this->api->GetCarImage("carro", callback);
+    QString search = ui->brandComboBox->currentText() + " " + ui->modelComboBox->currentText();
+    this->api->GetCarImageLinks(search, callback);
+}
+
+void MainWindow::GetCarImageFromLink()
+{
+    ApiManager::ImageResponseCallback callback = [this](QByteArray answer)
+    {
+        this->ShowCarImage(answer);
+    };
+    this->api->GetCarImage(carImageLinks.at(0), callback);
 }
 
 void MainWindow::FillBrands(QJsonDocument &brands)
@@ -287,7 +297,26 @@ void MainWindow::FillModelPriceHistory(QJsonDocument &fipeInfo)
     }
 }
 
-void MainWindow::fillCarImage(QJsonDocument carImage)
+void MainWindow::FillCarImageLinks(QJsonDocument carImage)
 {
+    this->carImageLinks.clear();
+    if (!carImage.isNull() && carImage.isObject())
+    {
+        QJsonObject jsonObject = carImage.object();
+        QJsonArray items = jsonObject["items"].toArray();
 
+        for (const QJsonValue &value : items)
+        {
+            QString itemLink = value["link"].toString();
+            this->carImageLinks.push_back(itemLink);
+        }
+        this->GetCarImageFromLink();
+    }
+}
+
+void MainWindow::ShowCarImage(QByteArray img)
+{
+    QPixmap pixmap;
+    pixmap.loadFromData(img);
+    ui->carImageLabel->setPixmap(pixmap);
 }

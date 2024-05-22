@@ -122,19 +122,32 @@ void ApiManager::GetMonthReferences(ResponseCallback callback)
     });
 }
 
-void ApiManager::GetCarImage(const QString &search, ResponseCallback callback)
+void ApiManager::GetCarImageLinks(const QString &search, ResponseCallback callback)
 {
-    QString teste = GOOGLE_SEARCH_API_KEY;
-    this->request.setUrl(QUrl("https://www.googleapis.com/customsearch/v1?key="+teste+
-                              "&cx="+ID_SEARCH_ENGINE+"&q="+search+"&searchType=image"));
+    // QString teste = GOOGLE_SEARCH_API_KEY;
+    // this->request.setUrl(QUrl("https://www.googleapis.com/customsearch/v1?key="+teste+
+    //                           "&cx="+ID_SEARCH_ENGINE+"&q="+search+"&searchType=image&fileType=png"));
 
+    QUrl url = QUrl("https://www.googleapis.com/customsearch/v1");
+    this->SetCustomSearchParameters(search, url);
+
+    this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    //this->request.setRawHeader("X-Subscription-Token", Token);
-    qWarning() << "REQUEST CARRO = " << this->request.url();
+
     QNetworkReply *reply = this->manager->get(this->request);
 
     connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
         this->SetJsonCallback(reply, callback);
+    });
+}
+
+void ApiManager::GetCarImage(const QString &imageLink, ImageResponseCallback callback)
+{
+    this->request.setUrl(QUrl(imageLink));
+    QNetworkReply *reply = this->manager->get(this->request);
+
+    connect(reply, &QNetworkReply::finished, this, [reply, callback, this]{
+        this->SetByteArrayCallback(reply, callback);
     });
 }
 
@@ -173,8 +186,18 @@ void ApiManager::SetJsonCallback(QNetworkReply *reply, ResponseCallback callback
 
     QByteArray answer = reply->readAll();
     QJsonDocument json = QJsonDocument::fromJson(answer);
-    qWarning() << "RESPOSTA = " << answer;
     callback(json);
+    reply->deleteLater();
+}
+
+void ApiManager::SetByteArrayCallback(QNetworkReply *reply, ImageResponseCallback callback)
+{
+    if (reply->error())
+    {
+        qDebug() << reply->errorString();
+        return;
+    }
+    callback(reply->readAll());
     reply->deleteLater();
 }
 
@@ -186,4 +209,17 @@ void ApiManager::SetMonthReferenceParameter(const QString &monthReference, QUrl 
         query.addQueryItem("reference", monthReference);
         url.setQuery(query);
     }
+}
+
+void ApiManager::SetCustomSearchParameters(const QString &search, QUrl &url)
+{
+    QUrlQuery query(url.query());
+    query.addQueryItem("key", GOOGLE_SEARCH_API_KEY);
+    query.addQueryItem("cx", ID_SEARCH_ENGINE);
+    query.addQueryItem("q", search);
+    query.addQueryItem("searchType", "image");
+    query.addQueryItem("fileType", "jpg");
+    query.addQueryItem("gl", "pt-BR");
+    query.addQueryItem("lr", "lang_pt");
+    url.setQuery(query);
 }
