@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QTimer>
 #include <QMessageBox>
+#include <QMap>
 
 class ApiManager;
 
@@ -33,12 +34,16 @@ public slots:
     void YearReferenceChosen(int index);
     void GetFipeInfo();
     void GetModelPriceHistory();
+    void nextCarImage();
+    void previousCarImage();
 
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<ApiManager> api;
     QString currentFipeCode;
     std::vector<QString> carImageLinks;
+    QString currentImageLink;
+    QMap<QString, QByteArray> imagesMap;
 
     void SetupMonthReferences();
     void SetupVehicleType();

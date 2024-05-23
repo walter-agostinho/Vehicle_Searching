@@ -33,6 +33,8 @@ void MainWindow::enableConnects()
     connect(ui->modelComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::ModelChosen);
     connect(ui->searchFipeButton, &QPushButton::clicked, this, &MainWindow::GetFipeInfo);
     connect(ui->priceHistoryButton, &QPushButton::clicked, this, &MainWindow::GetModelPriceHistory);
+    connect(ui->nextImageButton, &QPushButton::clicked, this, &MainWindow::nextCarImage);
+    connect(ui->previousImageButton, &QPushButton::clicked, this, &MainWindow::previousCarImage);
 
     this->SetupVehicleType();
 }
@@ -134,6 +136,50 @@ void MainWindow::GetModelPriceHistory()
     }
 }
 
+void MainWindow::nextCarImage()
+{
+    auto it =  std::find(this->carImageLinks.begin(), this->carImageLinks.end(), currentImageLink);
+
+    if(it == this->carImageLinks.end() || std::next(it) == this->carImageLinks.end())
+    {
+        QMessageBox::information(this, "Informação", "Chegou no limite de máximo de imagem");
+        return;
+    }
+    auto next = std::next(it);
+
+    currentImageLink = *next;
+    if(!this->imagesMap.contains(currentImageLink))
+    {
+        this->GetCarImageFromLink();
+    }
+    else
+    {
+        this->ShowCarImage(this->imagesMap.value(*next));
+    }
+}
+
+void MainWindow::previousCarImage()
+{
+    auto it =  std::find(this->carImageLinks.begin(), this->carImageLinks.end(), currentImageLink);
+
+    if(it == this->carImageLinks.end() || it == this->carImageLinks.begin())
+    {
+        QMessageBox::information(this, "Informação", "Não é possível selecionar o anterior");
+        return;
+    }
+    auto prev = std::prev(it);
+
+    currentImageLink = *prev;
+    if(!this->imagesMap.contains(currentImageLink))
+    {
+        this->GetCarImageFromLink();
+    }
+    else
+    {
+        this->ShowCarImage(this->imagesMap.value(*prev));
+    }
+}
+
 void MainWindow::SetupMonthReferences()
 {
     ApiManager::ResponseCallback callback = [this](QJsonDocument answer)
@@ -174,6 +220,7 @@ void MainWindow::GetCarImageLinks()
     QString search = ui->brandComboBox->currentText() + " " +
                      ui->modelComboBox->currentText() + " " +
                      ui->yearsByModelComboBox->currentText();
+
     this->api->GetCarImageLinks(search, callback);
 }
 
@@ -182,8 +229,10 @@ void MainWindow::GetCarImageFromLink()
     ApiManager::ImageResponseCallback callback = [this](QByteArray answer)
     {
         this->ShowCarImage(answer);
+        this->imagesMap.insert(currentImageLink, answer);
     };
-    this->api->GetCarImage(carImageLinks.at(0), callback);
+
+    this->api->GetCarImage(currentImageLink, callback);
 }
 
 void MainWindow::FillBrands(QJsonDocument &brands)
@@ -302,6 +351,7 @@ void MainWindow::FillModelPriceHistory(QJsonDocument &fipeInfo)
 void MainWindow::FillCarImageLinks(QJsonDocument carImage)
 {
     this->carImageLinks.clear();
+    this->currentImageLink.clear();
     if (!carImage.isNull() && carImage.isObject())
     {
         QJsonObject jsonObject = carImage.object();
@@ -312,6 +362,7 @@ void MainWindow::FillCarImageLinks(QJsonDocument carImage)
             QString itemLink = value["link"].toString();
             this->carImageLinks.push_back(itemLink);
         }
+        currentImageLink = this->carImageLinks.at(0);
         this->GetCarImageFromLink();
     }
 }
@@ -321,6 +372,6 @@ void MainWindow::ShowCarImage(QByteArray img)
     QPixmap pixmap;
     pixmap.loadFromData(img);
     QSize desiredSize(400, 300);
-    QPixmap scaledPixmap = pixmap.scaled(desiredSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+    QPixmap scaledPixmap = pixmap.scaled(desiredSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ui->carImageLabel->setPixmap(scaledPixmap);
 }
