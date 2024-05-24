@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>350</x>
-      <y>10</y>
+      <y>40</y>
       <width>400</width>
       <height>300</height>
      </rect>
@@ -131,27 +131,32 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>370</y>
+      <y>420</y>
       <width>361</width>
-      <height>191</height>
+      <height>171</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="priceHistoryPlainTextEdit">
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>370</y>
-      <width>361</width>
-      <height>191</height>
+      <y>420</y>
+      <width>151</width>
+      <height>171</height>
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>320</y>
+      <y>370</y>
       <width>168</width>
       <height>26</height>
      </rect>
@@ -160,14 +165,55 @@
      <item>
       <widget class="QPushButton" name="previousImageButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>&lt;&lt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="nextImageButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>550</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Registros</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>360</y>
+      <width>241</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="priceLineEdit">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
        </property>
       </widget>
      </item>

@@ -321,6 +321,8 @@ void MainWindow::FillFipeInfo(QJsonDocument &fipeInfo)
         ui->vehiclePlainTextEdit->appendPlainText("Ano do modelo: " + QString::number(jsonObject.value("modelYear").toInt()));
         ui->vehiclePlainTextEdit->appendPlainText("Preço: " + jsonObject.value("price").toString());
         ui->vehiclePlainTextEdit->appendPlainText("Mês de Referência: " + jsonObject.value("referenceMonth").toString());
+
+        ui->priceLineEdit->setText(jsonObject.value("price").toString());
     }
 }
 
