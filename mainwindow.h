@@ -36,6 +36,7 @@ public slots:
     void GetModelPriceHistory();
     void nextCarImage();
     void previousCarImage();
+    void OpenRegistries();
 
 private:
     Ui::MainWindow *ui;

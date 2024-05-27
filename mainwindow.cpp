@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "carregistriesdialog.h"
 
 MainWindow::MainWindow(QWidget *parent, std::shared_ptr<ApiManager> api)
     : QMainWindow(parent)
@@ -35,6 +36,7 @@ void MainWindow::enableConnects()
     connect(ui->priceHistoryButton, &QPushButton::clicked, this, &MainWindow::GetModelPriceHistory);
     connect(ui->nextImageButton, &QPushButton::clicked, this, &MainWindow::nextCarImage);
     connect(ui->previousImageButton, &QPushButton::clicked, this, &MainWindow::previousCarImage);
+    connect(ui->registriesButton, &QPushButton::clicked, this, &MainWindow::OpenRegistries);
 
     this->SetupVehicleType();
 }
@@ -178,6 +180,12 @@ void MainWindow::previousCarImage()
     {
         this->ShowCarImage(this->imagesMap.value(*prev));
     }
+}
+
+void MainWindow::OpenRegistries()
+{
+    CarRegistriesDialog carRegistries;
+    carRegistries.show();
 }
 
 void MainWindow::SetupMonthReferences()

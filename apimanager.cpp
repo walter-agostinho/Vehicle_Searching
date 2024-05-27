@@ -3,6 +3,7 @@
 ApiManager::ApiManager()
 {
     this->manager = new QNetworkAccessManager(this);
+    this->LoadSettings();
 
     //connect(this->manager, &QNetworkAccessManager::finished, this, &ApiManager::ManagerFinished);
 
@@ -26,7 +27,7 @@ void ApiManager::GetBrands(const QString &vehicleType, const QString &monthRefer
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    this->request.setRawHeader("X-Subscription-Token", Token);
+    this->request.setRawHeader("X-Subscription-Token", TOKEN);
 
     QNetworkReply *reply = this->manager->get(this->request);
 
@@ -44,7 +45,7 @@ void ApiManager::GetModels(const QString &vehicleType, const QString &brandId, c
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    this->request.setRawHeader("X-Subscription-Token", Token);
+    this->request.setRawHeader("X-Subscription-Token", TOKEN);
 
     QNetworkReply *reply = this->manager->get(this->request);
 
@@ -63,7 +64,7 @@ void ApiManager::GetYearsByModel(const QString &vehicleType, const QString &bran
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    this->request.setRawHeader("X-Subscription-Token", Token);
+    this->request.setRawHeader("X-Subscription-Token", TOKEN);
 
     QNetworkReply *reply = this->manager->get(this->request);
 
@@ -82,7 +83,7 @@ void ApiManager::GetFipeInfo(const QString &vehicleType, const QString &brandId,
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    this->request.setRawHeader("X-Subscription-Token", Token);
+    this->request.setRawHeader("X-Subscription-Token", TOKEN);
 
     QNetworkReply *reply = this->manager->get(this->request);
 
@@ -100,7 +101,7 @@ void ApiManager::GetModelPriceHistory(const QString &vehicleType, const QString 
 
     this->request.setUrl(url);
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    this->request.setRawHeader("X-Subscription-Token", Token);
+    this->request.setRawHeader("X-Subscription-Token", TOKEN);
 
     QNetworkReply *reply = this->manager->get(this->request);
 
@@ -113,7 +114,7 @@ void ApiManager::GetMonthReferences(ResponseCallback callback)
 {
     this->request.setUrl(QUrl("https://fipe.parallelum.com.br/api/v2/references"));
     this->request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    this->request.setRawHeader("X-Subscription-Token", Token);
+    this->request.setRawHeader("X-Subscription-Token", TOKEN);
 
     QNetworkReply *reply = this->manager->get(this->request);
 
@@ -174,6 +175,24 @@ void ApiManager::slotError(QNetworkReply::NetworkError)
 void ApiManager::slotSslErrors(const QList<QSslError> &errors)
 {
     qDebug() << "AQUI 3";
+}
+
+void ApiManager::LoadSettings()
+{
+    QString configFilePath("config.ini");
+    QSettings settings(configFilePath, QSettings::IniFormat);
+
+    // Verifica se o arquivo de configuração existe
+    QFile configFile(configFilePath);
+    if (!configFile.exists())
+    {
+        qWarning() << "Config file not found!";
+        return;
+    }
+
+    TOKEN = settings.value("API/Token").toByteArray();
+    GOOGLE_SEARCH_API_KEY = settings.value("API/GoogleSearchApiKey").toString();
+    ID_SEARCH_ENGINE = settings.value("API/IdSearchEngine").toString();
 }
 
 void ApiManager::SetJsonCallback(QNetworkReply *reply, ResponseCallback callback)

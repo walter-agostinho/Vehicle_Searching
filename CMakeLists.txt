@@ -9,8 +9,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(OPENSSL_ROOT_DIR "C:/Qt/Tools/OpenSSLv3/Win_x64")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Network)
+find_package(OpenSSL REQUIRED)
+
+include_directories("C:/Qt/Tools/OpenSSLv3/Win_x64/include")
 
 set(PROJECT_SOURCES
         main.cpp
@@ -26,6 +31,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         login.h login.cpp login.ui
         databasemanager.h databasemanager.cpp
         apimanager.h apimanager.cpp
+        carregistriesdialog.h carregistriesdialog.cpp carregistriesdialog.ui
 
 
     )
@@ -50,6 +56,10 @@ endif()
 target_link_libraries(Vehicle_Searching PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
                                                 Qt${QT_VERSION_MAJOR}::Sql
                                                 Qt${QT_VERSION_MAJOR}::Network)
+
+target_link_libraries(Vehicle_Searching PRIVATE ${OPENSSL_LIBRARIES})
+
+message(STATUS "OPENSSL_INCLUDE_DIR: ${OPENSSL_INCLUDE_DIR}")
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

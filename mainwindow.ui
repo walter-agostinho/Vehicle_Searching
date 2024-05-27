@@ -178,7 +178,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="registriesButton">
     <property name="geometry">
      <rect>
       <x>610</x>
@@ -204,7 +204,7 @@
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Preço FIPE:</string>
        </property>
       </widget>
      </item>
