@@ -151,6 +151,8 @@ void DatabaseManager::CreateTables()
                   "price_history VARCHAR NULL, "
                   "month_reference VARCHAR NOT NULL, "
                   "vehicle_type VARCHAR NOT NULL, "
+                  "price_paid INTERGER NULL, "
+                  "sold_price INTERGER NULL, "
                   "FOREIGN KEY (user_id) REFERENCES users(id) "
                   ");");
 
