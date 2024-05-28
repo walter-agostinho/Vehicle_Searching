@@ -4,6 +4,31 @@
 #include "databasemanager.h"
 #include <QDialog>
 
+struct Vehicle
+{
+    int id;
+    int userId;
+    QString brand;
+    QString codeFipe;
+    QString fuel;
+    QString model;
+    QString modelYear;
+    QString price;
+    QString priceHistory;
+    QString monthReference;
+    QString vehicleType;
+    std::optional<int> pricePaid;
+    std::optional<int> soldPrice;
+};
+
+struct Cost
+{
+    int id;
+    int vehicleId;
+    QString description;
+    int price;
+};
+
 namespace Ui {
 class CarRegistriesDialog;
 }
