@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "apimanager.h"
+#include "carregistriesdialog.h"
 #include "databasemanager.h"
 #include <QJsonObject>
 #include <QJsonArray>
@@ -28,6 +29,8 @@ public:
 
     ~MainWindow();
 
+    void GetVehicleInfo(Vehicle& vehicle);
+
 public slots:
     void OnLoginSuccessful();
     void enableConnects();
@@ -49,6 +52,7 @@ private:
     std::vector<QString> carImageLinks;
     QString currentImageLink;
     QMap<QString, QByteArray> imagesMap;
+    Vehicle currentVehicleInfo;
 
     void SetupMonthReferences();
     void SetupVehicleType();
@@ -63,5 +67,7 @@ private:
     void FillModelPriceHistory(QJsonDocument &fipeInfo);
     void FillCarImageLinks(QJsonDocument carImage);
     void ShowCarImage(QByteArray img);
+
+    void SetVehicleInfo(const Vehicle& vehicle);
 };
 #endif // MAINWINDOW_H

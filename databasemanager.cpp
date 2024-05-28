@@ -58,6 +58,29 @@ bool DatabaseManager::CheckCredentials(const QString &user, const QString &passw
     }
 }
 
+void DatabaseManager::GetVehicleCosts(std::vector<Cost> costs)
+{
+    QSqlQuery query(this->db);
+    query.prepare("SELECT * FROM costs;");
+
+    if(!query.exec())
+    {
+        qWarning() << "Error to get vehicles costs - " << query.lastError();
+        return;
+    }
+
+    while (query.next())
+    {
+        Cost cost;
+        cost.id = query.value("id").toInt();
+        cost.description = query.value("description").toString();
+        cost.price = query.value("price").toInt();
+        cost.vehicleId = query.value("vehicle_id").toInt();
+        costs.push_back(cost);
+    }
+
+}
+
 void DatabaseManager::CreateDatabase()
 {
     QDir dir;

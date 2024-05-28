@@ -1,7 +1,7 @@
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
-#include <QString.h>
+#include "carregistriesdialog.h"
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QFile>
@@ -26,6 +26,7 @@ public:
     void GetConnectionStatus(QString &status);
     bool CreateAccount(const QString &user, const QString &password);
     bool CheckCredentials(const QString &user, const QString &password);
+    void GetVehicleCosts(std::vector<Cost> costs);
 
 private:
     void CreateDatabase();

@@ -1,8 +1,8 @@
 #ifndef CARREGISTRIESDIALOG_H
 #define CARREGISTRIESDIALOG_H
 
-#include "databasemanager.h"
 #include <QDialog>
+#include <QMessageBox>
 
 struct Vehicle
 {
@@ -14,7 +14,6 @@ struct Vehicle
     QString model;
     QString modelYear;
     QString price;
-    QString priceHistory;
     QString monthReference;
     QString vehicleType;
     std::optional<int> pricePaid;
@@ -29,6 +28,9 @@ struct Cost
     int price;
 };
 
+class DatabaseManager;
+class MainWindow;
+
 namespace Ui {
 class CarRegistriesDialog;
 }
@@ -41,9 +43,17 @@ public:
     explicit CarRegistriesDialog(QWidget *parent = nullptr, std::shared_ptr<DatabaseManager> databaseManager = nullptr);
     ~CarRegistriesDialog();
 
+public slots:
+    void SaveCosts();
+    void UpdateCosts();
+    void DeleteCosts();
+
 private:
     Ui::CarRegistriesDialog *ui;
     std::shared_ptr<DatabaseManager> databaseManager;
+    MainWindow *mainwindow;
+
+    void FillCostsTable();
 };
 
 #endif // CARREGISTRIESDIALOG_H

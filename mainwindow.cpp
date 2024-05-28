@@ -321,16 +321,27 @@ void MainWindow::FillFipeInfo(QJsonDocument &fipeInfo)
     {
         QJsonObject jsonObject = fipeInfo.object();
 
-        this->currentFipeCode = jsonObject.value("codeFipe").toString();
+        Vehicle vehicle;
+        vehicle.vehicleType = ui->vehicleTypeComboBox->currentText();
+        vehicle.brand = jsonObject.value("brand").toString();
+        vehicle.codeFipe = jsonObject.value("codeFipe").toString();
+        vehicle.fuel = jsonObject.value("fuel").toString();
+        vehicle.model = jsonObject.value("model").toString();
+        vehicle.modelYear = QString::number(jsonObject.value("modelYear").toInt());
+        vehicle.price = jsonObject.value("price").toString();
+        vehicle.monthReference = jsonObject.value("referenceMonth").toString();
+        this->SetVehicleInfo(vehicle);
 
-        ui->vehiclePlainTextEdit->appendPlainText("Marca: " + jsonObject.value("brand").toString());
-        ui->vehiclePlainTextEdit->appendPlainText("Codigo da Fipe: " + this->currentFipeCode);
-        ui->vehiclePlainTextEdit->appendPlainText("Combustível: " + jsonObject.value("fuel").toString());
-        ui->vehiclePlainTextEdit->appendPlainText("Modelo: " + jsonObject.value("model").toString());
-        ui->vehiclePlainTextEdit->appendPlainText("Ano do modelo: " + QString::number(jsonObject.value("modelYear").toInt()));
-        ui->vehiclePlainTextEdit->appendPlainText("Preço: " + jsonObject.value("price").toString());
-        ui->vehiclePlainTextEdit->appendPlainText("Mês de Referência: " + jsonObject.value("referenceMonth").toString());
 
+        ui->vehiclePlainTextEdit->appendPlainText("Marca: " + vehicle.brand);
+        ui->vehiclePlainTextEdit->appendPlainText("Codigo da Fipe: " + vehicle.codeFipe);
+        ui->vehiclePlainTextEdit->appendPlainText("Combustível: " + vehicle.fuel);
+        ui->vehiclePlainTextEdit->appendPlainText("Modelo: " + vehicle.model);
+        ui->vehiclePlainTextEdit->appendPlainText("Ano do modelo: " + vehicle.modelYear);
+        ui->vehiclePlainTextEdit->appendPlainText("Preço: " + vehicle.price);
+        ui->vehiclePlainTextEdit->appendPlainText("Mês de Referência: " + vehicle.monthReference);
+
+        this->currentFipeCode = vehicle.codeFipe;
         ui->priceLineEdit->setText(jsonObject.value("price").toString());
     }
 }
@@ -385,4 +396,14 @@ void MainWindow::ShowCarImage(QByteArray img)
     QSize desiredSize(400, 300);
     QPixmap scaledPixmap = pixmap.scaled(desiredSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ui->carImageLabel->setPixmap(scaledPixmap);
+}
+
+void MainWindow::SetVehicleInfo(const Vehicle &vehicle)
+{
+    this->currentVehicleInfo = vehicle;
+}
+
+void MainWindow::GetVehicleInfo(Vehicle &vehicle)
+{
+    vehicle = this->currentVehicleInfo;
 }
