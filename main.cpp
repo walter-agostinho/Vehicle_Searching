@@ -1,3 +1,4 @@
+#include "carregistriesdialog.h"
 #include "databasemanager.h"
 #include "login.h"
 #include "mainwindow.h"

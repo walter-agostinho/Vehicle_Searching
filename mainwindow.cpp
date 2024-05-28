@@ -2,9 +2,10 @@
 #include "./ui_mainwindow.h"
 #include "carregistriesdialog.h"
 
-MainWindow::MainWindow(QWidget *parent, std::shared_ptr<ApiManager> api)
+MainWindow::MainWindow(QWidget *parent, std::shared_ptr<ApiManager> api, std::shared_ptr<DatabaseManager> databaseManager)
     : QMainWindow(parent)
     , api(api)
+    , databaseManager(databaseManager)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -184,8 +185,8 @@ void MainWindow::previousCarImage()
 
 void MainWindow::OpenRegistries()
 {
-    CarRegistriesDialog carRegistries;
-    carRegistries.show();
+    CarRegistriesDialog *carRegistries = new CarRegistriesDialog(this, databaseManager);
+    carRegistries->show();
 }
 
 void MainWindow::SetupMonthReferences()

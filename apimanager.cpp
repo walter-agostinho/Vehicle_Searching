@@ -182,7 +182,6 @@ void ApiManager::LoadSettings()
     QString configFilePath("config.ini");
     QSettings settings(configFilePath, QSettings::IniFormat);
 
-    // Verifica se o arquivo de configuração existe
     QFile configFile(configFilePath);
     if (!configFile.exists())
     {

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "apimanager.h"
+#include "databasemanager.h"
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QTimer>
@@ -22,7 +23,9 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, std::shared_ptr<ApiManager> api = nullptr);
+    MainWindow(QWidget *parent = nullptr, std::shared_ptr<ApiManager> api = nullptr,
+               std::shared_ptr<DatabaseManager> databaseManager = nullptr);
+
     ~MainWindow();
 
 public slots:
@@ -41,6 +44,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<ApiManager> api;
+    std::shared_ptr<DatabaseManager> databaseManager;
     QString currentFipeCode;
     std::vector<QString> carImageLinks;
     QString currentImageLink;
