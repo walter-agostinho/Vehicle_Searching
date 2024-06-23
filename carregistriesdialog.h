@@ -6,8 +6,8 @@
 
 struct Vehicle
 {
-    int id;
-    int userId;
+    int id{-1};
+    int userId{-1};
     QString brand;
     QString codeFipe;
     QString fuel;
@@ -16,8 +16,8 @@ struct Vehicle
     QString price;
     QString monthReference;
     QString vehicleType;
-    std::optional<int> pricePaid;
-    std::optional<int> soldPrice;
+    std::optional<double> pricePaid;
+    std::optional<double> soldPrice;
 };
 
 struct Cost
@@ -47,6 +47,7 @@ public slots:
     void SaveCosts();
     void UpdateCosts();
     void DeleteCosts();
+    void SaveVehicle();
 
 private:
     Ui::CarRegistriesDialog *ui;

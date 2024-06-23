@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     std::shared_ptr<ApiManager> api = std::make_shared<ApiManager>();
 
     Login login(nullptr, databaseManager);
-    MainWindow w(nullptr, api);
+    MainWindow w(nullptr, api, databaseManager);
 
     QObject::connect(&login, &Login::LoginSuccessful, &w, &MainWindow::OnLoginSuccessful);
     login.show();

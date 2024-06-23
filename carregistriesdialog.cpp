@@ -10,7 +10,8 @@ CarRegistriesDialog::CarRegistriesDialog(QWidget *parent, std::shared_ptr<Databa
 {
     ui->setupUi(this);
     this->mainwindow = qobject_cast<MainWindow *>(parent);
-    connect(ui->saveButton, &QPushButton::clicked, this, &CarRegistriesDialog::SaveCosts);
+    connect(ui->saveCostsButton, &QPushButton::clicked, this, &CarRegistriesDialog::SaveCosts);
+    connect(ui->saveVehicleButton, &QPushButton::clicked, this, &CarRegistriesDialog::SaveVehicle);
 
 }
 
@@ -27,8 +28,7 @@ void CarRegistriesDialog::SaveCosts()
         return;
     }
 
-    Vehicle vehicle;
-    mainwindow->GetVehicleInfo(vehicle);
+
 }
 
 void CarRegistriesDialog::UpdateCosts()
@@ -39,6 +39,39 @@ void CarRegistriesDialog::UpdateCosts()
 void CarRegistriesDialog::DeleteCosts()
 {
 
+}
+
+void CarRegistriesDialog::SaveVehicle()
+{
+    Vehicle vehicle;
+    this->mainwindow->GetVehicleInfo(vehicle);
+    if(vehicle.codeFipe.isEmpty())
+    {
+        QMessageBox::information(this, "Atenção", "Veículo não foi buscado");
+        return;
+    }
+    if(ui->pricePaidSpinBox->value() <= 0)
+    {
+        QMessageBox::information(this, "Atenção", "Necessário pelo menos informar o valor pago");
+        return;
+    }
+    else
+    {
+        vehicle.pricePaid = ui->pricePaidSpinBox->value();
+        if(ui->priceSoldSpinBox->value() > 0)
+        {
+            vehicle.soldPrice = ui->priceSoldSpinBox->value();
+        }
+        int ret = this->databaseManager->SaveVehicle(vehicle, this->mainwindow->GetUser());
+        if(ret < 0)
+        {
+            QMessageBox::warning(this, "Erro", "Não foi possível salvar o veículo");
+        }
+        else
+        {
+            QMessageBox::information(this, "Informação", "Veículo salvo");
+        }
+    }
 }
 
 void CarRegistriesDialog::FillCostsTable()

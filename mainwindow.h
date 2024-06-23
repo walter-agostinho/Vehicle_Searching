@@ -30,9 +30,10 @@ public:
     ~MainWindow();
 
     void GetVehicleInfo(Vehicle& vehicle);
+    QString GetUser() const;
 
 public slots:
-    void OnLoginSuccessful();
+    void OnLoginSuccessful(const QString &user);
     void enableConnects();
     void VehicleTypeChosen(int index);
     void BrandChosen(int index);
@@ -53,6 +54,7 @@ private:
     QString currentImageLink;
     QMap<QString, QByteArray> imagesMap;
     Vehicle currentVehicleInfo;
+    QString user;
 
     void SetupMonthReferences();
     void SetupVehicleType();

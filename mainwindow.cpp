@@ -22,8 +22,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::OnLoginSuccessful()
+void MainWindow::OnLoginSuccessful(const QString &user)
 {
+    this->user = user;
     this->show();
 }
 
@@ -406,4 +407,9 @@ void MainWindow::SetVehicleInfo(const Vehicle &vehicle)
 void MainWindow::GetVehicleInfo(Vehicle &vehicle)
 {
     vehicle = this->currentVehicleInfo;
+}
+
+QString MainWindow::GetUser() const
+{
+    return this->user;
 }

@@ -30,7 +30,7 @@ void Login::CreateAccount()
     bool success = this->databaseManager->CreateAccount(ui->userLineEdit->text(), ui->passwordLineEdit->text());
     if(success)
     {
-        emit LoginSuccessful();
+        emit LoginSuccessful(ui->userLineEdit->text());
         this->close();
     }
     else
@@ -44,7 +44,7 @@ void Login::CheckCredentials()
     bool success = this->databaseManager->CheckCredentials(ui->userLineEdit->text(), ui->passwordLineEdit->text());
     if(success)
     {
-        emit LoginSuccessful();
+        emit LoginSuccessful(ui->userLineEdit->text());
         this->close();
     }
     else

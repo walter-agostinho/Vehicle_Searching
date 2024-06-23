@@ -19,7 +19,7 @@ public:
     ~Login();
 
 signals:
-    void LoginSuccessful();
+    void LoginSuccessful(const QString &user);
 
 private:
     Ui::Login *ui;

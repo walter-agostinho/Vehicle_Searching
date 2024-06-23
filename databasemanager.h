@@ -27,6 +27,8 @@ public:
     bool CreateAccount(const QString &user, const QString &password);
     bool CheckCredentials(const QString &user, const QString &password);
     void GetVehicleCosts(std::vector<Cost> costs);
+    int SaveVehicle(const Vehicle &vehicle, const QString &user);
+    int GetCurrentUserId(QString user);
 
 private:
     void CreateDatabase();

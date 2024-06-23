@@ -81,6 +81,53 @@ void DatabaseManager::GetVehicleCosts(std::vector<Cost> costs)
 
 }
 
+int DatabaseManager::SaveVehicle(const Vehicle &vehicle, const QString &user)
+{
+    QSqlQuery query(this->db);
+    QString queryString = "INSERT INTO vehicles(user_id, brand, code_fipe, fuel, model, model_year, "
+                          "price, month_reference, vehicle_type, price_paid, sold_price) "
+                          "VALUES (:user_id, :brand, :code_fipe, :fuel, :model, :model_year, "
+                          ":price, :month_reference, :vehicle_type, :price_paid, :sold_price);";
+
+    query.prepare(queryString);
+    query.bindValue(":user_id", this->GetCurrentUserId(user));
+    query.bindValue(":brand", vehicle.brand);
+    query.bindValue(":code_fipe", vehicle.codeFipe);
+    query.bindValue(":fuel", vehicle.fuel);
+    query.bindValue(":model", vehicle.model);
+    query.bindValue(":model_year", vehicle.modelYear);
+    query.bindValue(":price", vehicle.price);
+    query.bindValue(":month_reference", vehicle.monthReference);
+    query.bindValue(":vehicle_type", vehicle.vehicleType);
+    query.bindValue(":price_paid", vehicle.pricePaid.has_value() ? QVariant(vehicle.pricePaid.value()) : QVariant());
+    query.bindValue(":sold_price", vehicle.soldPrice.has_value() ? QVariant(vehicle.soldPrice.value()) : QVariant());
+
+    if(!query.exec())
+    {
+        qWarning() << "Error to save vehicle - " << query.lastError();
+        return -1;
+    }
+    return 0;
+}
+
+int DatabaseManager::GetCurrentUserId(QString user)
+{
+    QSqlQuery query(this->db);
+    query.prepare("SELECT id FROM users WHERE user =:user;");
+    query.bindValue(":user", user);
+
+    if(!query.exec())
+    {
+        qWarning() << "Error to get user id - " << query.lastError();
+        return -1;
+    }
+    while(query.first())
+    {
+        return query.value("id").toInt();
+    }
+    return -1;
+}
+
 void DatabaseManager::CreateDatabase()
 {
     QDir dir;
@@ -171,11 +218,10 @@ void DatabaseManager::CreateTables()
                   "model VARCHAR NOT NULL, "
                   "model_year VARCHAR NOT NULL, "
                   "price VARCHAR NOT NULL, "
-                  "price_history VARCHAR NULL, "
                   "month_reference VARCHAR NOT NULL, "
                   "vehicle_type VARCHAR NOT NULL, "
-                  "price_paid INTERGER NULL, "
-                  "sold_price INTERGER NULL, "
+                  "price_paid REAL NULL, "
+                  "sold_price REAL NULL, "
                   "FOREIGN KEY (user_id) REFERENCES users(id) "
                   ");");
 
