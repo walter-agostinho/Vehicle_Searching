@@ -13,6 +13,8 @@ CarRegistriesDialog::CarRegistriesDialog(QWidget *parent, std::shared_ptr<Databa
     connect(ui->saveCostsButton, &QPushButton::clicked, this, &CarRegistriesDialog::SaveCosts);
     connect(ui->saveVehicleButton, &QPushButton::clicked, this, &CarRegistriesDialog::SaveVehicle);
 
+    this->FillVehiclesTable();
+
 }
 
 CarRegistriesDialog::~CarRegistriesDialog()
@@ -50,28 +52,70 @@ void CarRegistriesDialog::SaveVehicle()
         QMessageBox::information(this, "Atenção", "Veículo não foi buscado");
         return;
     }
-    if(ui->pricePaidSpinBox->value() <= 0)
+
+    vehicle.pricePaid = ui->pricePaidSpinBox->value();
+    vehicle.soldPrice = ui->priceSoldSpinBox->value();
+    int ret = this->databaseManager->SaveVehicle(vehicle, this->mainwindow->GetUser());
+    if(ret < 0)
     {
-        QMessageBox::information(this, "Atenção", "Necessário pelo menos informar o valor pago");
+        QMessageBox::warning(this, "Erro", "Não foi possível salvar o veículo");
         return;
     }
     else
     {
-        vehicle.pricePaid = ui->pricePaidSpinBox->value();
-        if(ui->priceSoldSpinBox->value() > 0)
-        {
-            vehicle.soldPrice = ui->priceSoldSpinBox->value();
-        }
-        int ret = this->databaseManager->SaveVehicle(vehicle, this->mainwindow->GetUser());
-        if(ret < 0)
-        {
-            QMessageBox::warning(this, "Erro", "Não foi possível salvar o veículo");
-        }
-        else
-        {
-            QMessageBox::information(this, "Informação", "Veículo salvo");
-        }
+        QMessageBox::information(this, "Informação", "Veículo salvo");
     }
+    this->FillVehiclesTable();
+}
+
+void CarRegistriesDialog::FillVehiclesTable()
+{
+    std::vector<Vehicle> vehicles;
+    Vehicle vehicleFromMainwindow;
+
+    this->mainwindow->GetVehicleInfo(vehicleFromMainwindow);
+
+    int ret = this->databaseManager->GetVehiclesByFipeCode(vehicles, vehicleFromMainwindow.codeFipe, this->mainwindow->GetUser());
+    if(ret < 0)
+    {
+        QMessageBox::warning(this, "Erro", "Não foi possível buscar os registro de veículo");
+        return;
+    }
+    ui->vehiclesTableWidget->clear();
+    ui->vehiclesTableWidget->setRowCount(0);
+    ui->vehiclesTableWidget->setColumnCount(5);
+    ui->vehiclesTableWidget->setHorizontalHeaderLabels(QStringList() << "id" << "Modelo" <<
+                                                       "Preço Fipe" << "Preço Pago" << "Preço Vendido");
+
+    int row{0};
+    for(auto &vehicle : vehicles)
+    {
+        ui->vehiclesTableWidget->insertRow(row);
+
+        QTableWidgetItem *item;
+        item = new QTableWidgetItem();
+        item->setData(Qt::DisplayRole, QString::number(vehicle.id));
+        ui->vehiclesTableWidget->setItem(row, 0, item);
+
+        item = new QTableWidgetItem();
+        item->setText(vehicle.model);
+        ui->vehiclesTableWidget->setItem(row, 1, item);
+
+        item = new QTableWidgetItem();
+        item->setText((vehicle.price));
+        ui->vehiclesTableWidget->setItem(row, 2, item);
+
+        item = new QTableWidgetItem();
+        item->setText(QString::number(vehicle.pricePaid.value_or(0.00),'g', 10));
+        ui->vehiclesTableWidget->setItem(row, 3, item);
+
+        item = new QTableWidgetItem();
+        item->setText(QString::number(vehicle.soldPrice.value_or(0.00),'g', 10));
+        ui->vehiclesTableWidget->setItem(row, 4, item);
+
+        row++;
+    }
+    ui->vehiclesTableWidget->resizeColumnsToContents();
 }
 
 void CarRegistriesDialog::FillCostsTable()

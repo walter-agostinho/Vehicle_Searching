@@ -54,6 +54,7 @@ private:
     std::shared_ptr<DatabaseManager> databaseManager;
     MainWindow *mainwindow;
 
+    void FillVehiclesTable();
     void FillCostsTable();
 };
 

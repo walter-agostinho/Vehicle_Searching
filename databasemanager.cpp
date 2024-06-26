@@ -110,6 +110,35 @@ int DatabaseManager::SaveVehicle(const Vehicle &vehicle, const QString &user)
     return 0;
 }
 
+int DatabaseManager::GetVehiclesByFipeCode(std::vector<Vehicle> &vehicles, const QString &fipeCode, const QString &user)
+{
+    QSqlQuery query(this->db);
+    query.prepare("SELECT * FROM vehicles "
+                  "WHERE code_fipe =:fipeCode AND user_id =:userId;");
+
+    query.bindValue(":fipeCode", fipeCode);
+    query.bindValue(":userId", this->GetCurrentUserId(user));
+
+    if(!query.exec())
+    {
+        qWarning() << "Error to get vehicles by fipe code - " << query.lastError();
+        return -1;
+    }
+
+    while (query.next())
+    {
+        Vehicle vehicle;
+        vehicle.id = query.value("id").toInt();
+        vehicle.model = query.value("model").toString();
+        vehicle.price = query.value("price").toString();
+        vehicle.pricePaid = query.value("price_paid").toDouble();
+        vehicle.soldPrice = query.value("sold_price").toDouble();
+        vehicles.push_back(vehicle);
+    }
+    return 0;
+
+}
+
 int DatabaseManager::GetCurrentUserId(QString user)
 {
     QSqlQuery query(this->db);
@@ -212,7 +241,7 @@ void DatabaseManager::CreateTables()
     query.prepare("CREATE TABLE vehicles ("
                   "id INTEGER PRIMARY KEY, "
                   "user_id INTEGER NOT NULL, "
-                  "brand VARCHAR NOT NULL UNIQUE, "
+                  "brand VARCHAR NOT NULL, "
                   "code_fipe VARCHAR NOT NULL, "
                   "fuel VARCHAR NOT NULL, "
                   "model VARCHAR NOT NULL, "

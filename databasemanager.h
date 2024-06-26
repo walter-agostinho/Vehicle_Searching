@@ -28,13 +28,14 @@ public:
     bool CheckCredentials(const QString &user, const QString &password);
     void GetVehicleCosts(std::vector<Cost> costs);
     int SaveVehicle(const Vehicle &vehicle, const QString &user);
-    int GetCurrentUserId(QString user);
+    int GetVehiclesByFipeCode(std::vector<Vehicle> &vehicles, const QString &fipeCode, const QString &user);
 
 private:
     void CreateDatabase();
     void ConnectDatabase();
     bool AreTablesCreated();
     void CreateTables();
+    int GetCurrentUserId(QString user);
 
 };
 
